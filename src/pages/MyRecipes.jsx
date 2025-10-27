@@ -7,7 +7,7 @@ export default function MyRecipes() {
   const recipes = JSON.parse(localStorage.getItem("myRecipes")) || [];
 
   const handleRecipeClick = (recipe) => {
-    navigate(`/recipe/${recipe.id}`, { state: recipe }); // ✅ fixed template literal
+    navigate(`/recipe/${recipe.id}`, { state: recipe }); //
   };
 
   return (
