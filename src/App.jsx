@@ -6,6 +6,7 @@ import Restaurants from "./pages/Restaurants";
 import AddRecipe from "./pages/AddRecipe";
 import Chatbot from "./pages/Chatbot";
 import RecipeDetails from "./pages/RecipeDetails";
+import MyRecipes from "./pages/MyRecipes"; 
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/add" element={<AddRecipe />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
+          <Route path="/my-recipes" element={<MyRecipes />} />
         </Routes>
       </div>
     </div>
