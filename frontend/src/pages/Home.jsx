@@ -55,7 +55,7 @@ export default function Home() {
         <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
       At <span className="font-semibold text-teal-600">BiteRight</span>, we believe everyone deserves
       access to safe, affordable, and culturally inclusive meals. Our platform bridges the gap
-      between dietary needs and real-world food options — helping users make confident, informed
+      between dietary needs and real-world food options; helping users make confident, informed
       choices every day.
     </p>
   </div>
