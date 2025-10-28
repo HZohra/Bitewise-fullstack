@@ -47,7 +47,7 @@ export default function Home() {
 
       {/* Footer Section */}
       <footer>
-        <p className="text-center text-gray-500 mt-10 mb-5">© 2024 BiteRight. All rights reserved.</p>
+        <p className="text-center text-gray-500 mt-10 mb-5">© 2025 BiteRight. All rights reserved.</p>
       </footer>
 
     </div>
