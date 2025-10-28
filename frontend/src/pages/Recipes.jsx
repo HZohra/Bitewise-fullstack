@@ -16,14 +16,14 @@ export default function Recipes() {
   const fetchRecipes = async () => {
     setLoading(true);
     try {
-      let url = `https://api.edamam.com/api/recipes/v2?type=public&q=${encodeURIComponent(
-        searchTerm
-      )}&app_id=${APP_ID}&app_key=${APP_KEY}`;
+      let url = `http://localhost:5002/recipes?q=${encodeURIComponent(searchTerm)}`;
 
-      // Add filters (health labels)
-      selectedFilters.forEach((filter) => {
-        url += `&health=${filter.toLowerCase().replace(" ", "-")}`;
-      });
+      if (selectedFilters.length > 0) {
+      const filterString = selectedFilters
+        .map((f) => f.toLowerCase().replace(" ", "-"))
+        .join(",");
+      url += `&filters=${filterString}`;
+}
 
       const response = await fetch(url);
       const data = await response.json();
