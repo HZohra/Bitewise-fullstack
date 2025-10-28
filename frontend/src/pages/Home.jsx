@@ -24,7 +24,7 @@ export default function Home() {
           </div>
           <div className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow">
             <h3 className="text-xl font-semibold text-teal-600 mb-2">👩‍🍳 Community Recipes</h3>
-            <p className="text-gray-600 text-sm">Share your own recipes and discover meals from others like you under the 'Community' tab.</p>
+            <p className="text-gray-600 text-sm">Share your own recipes and discover meals from others like you under the 'Add Recipe' tab.</p>
           </div>
         </div>
       </section>
