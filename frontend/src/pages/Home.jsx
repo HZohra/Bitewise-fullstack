@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="text-center mt-20">
@@ -12,19 +14,31 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6">
         <h2 className="text-2xl font-semibold text-teal-600 mb-6 text-center">What We Offer</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow">
+          <div 
+            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            onClick={() => navigate('/recipes')}
+          >
             <h3 className="text-xl font-semibold text-teal-600 mb-2">🍲 Multi-Restriction Filtering</h3>
             <p className="text-gray-600 text-sm">Filter recipes based on multiple dietary restrictions, including vegan, gluten-free, and more under the 'Recipes' tab.</p>
           </div>
-          <div className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow">
+          <div 
+            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            onClick={() => navigate('/chatbot')}
+          >
             <h3 className="text-xl font-semibold text-teal-600 mb-2">🤖 AI Chatbot</h3>
             <p className="text-gray-600 text-sm">Ask BiteRight for meal ideas or restaurant suggestions instantly under the 'Chatbot' tab.</p>
           </div>
-          <div className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow">
+          <div 
+            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            onClick={() => navigate('/restaurants')}
+          >
             <h3 className="text-xl font-semibold text-teal-600 mb-2">📍 Local Restaurant Integration</h3>
             <p className="text-gray-600 text-sm">Discover nearby restaurants via Google Maps or Yelp that suit your dietary needs under the 'Restaurants' tab.</p>
           </div>
-          <div className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow">
+          <div 
+            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            onClick={() => navigate('/add')}
+          >
             <h3 className="text-xl font-semibold text-teal-600 mb-2">👩‍🍳 Community Recipes</h3>
             <p className="text-gray-600 text-sm">Share your own recipes and discover meals from others like you under the 'Add Recipe' tab.</p>
           </div>
