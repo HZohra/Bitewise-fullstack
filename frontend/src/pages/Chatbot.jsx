@@ -132,7 +132,7 @@ export default function Chatbot() {
     <div className="min-h-screen bg-green-50 p-6">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-teal-600 text-center mb-8">
-          AI Chatbot 🤖
+          AI Chatbot
         </h1>
         
         {/* Chat Container */}
