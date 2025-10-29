@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <div className="text-center mt-20">
-        <h1 className="text-3xl font-bold text-teal-600">Welcome to BiteRight 🍽️</h1>
+        <h1 className="text-3xl font-bold text-teal-600">Welcome to BiteWise 🍽️</h1>
         <p className="text-gray-700 mt-2 mb-12">Your personalized dietary companion</p>
       </div>
 
@@ -26,7 +26,7 @@ export default function Home() {
             onClick={() => navigate('/chatbot')}
           >
             <h3 className="text-xl font-semibold text-teal-600 mb-2">🤖 AI Chatbot</h3>
-            <p className="text-gray-600 text-sm">Ask BiteRight for meal ideas or restaurant suggestions instantly under the 'Chatbot' tab.</p>
+            <p className="text-gray-600 text-sm">Ask BiteWise for meal ideas or restaurant suggestions instantly under the 'Chatbot' tab.</p>
           </div>
           <div 
             className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
@@ -53,7 +53,7 @@ export default function Home() {
         <div className="max-w-3xl mx-auto">
         <h2 className="text-2xl sm:text-3xl font-semibold text-teal-600 mb-6">Our Mission</h2>
         <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-      At <span className="font-semibold text-teal-600">BiteRight</span>, we believe everyone deserves
+      At <span className="font-semibold text-teal-600">BiteWise</span>, we believe everyone deserves
       access to safe, affordable, and culturally inclusive meals. Our platform bridges the gap
       between dietary needs and real-world food options; helping users make confident, informed
       choices every day.
@@ -63,7 +63,7 @@ export default function Home() {
 
       {/* Footer Section */}
       <footer>
-        <p className="text-center text-gray-500 mt-10 mb-5">© 2025 BiteRight. All rights reserved.</p>
+        <p className="text-center text-gray-500 mt-10 mb-5">© 2025 BiteWise. All rights reserved.</p>
       </footer>
 
     </div>
