@@ -1,0 +1,32 @@
+{
+  "dietaryTags": {
+    "vegan": "vegan",
+    "vegetarian": "vegetarian", 
+    "gluten-free": "gluten-free",
+    "dairy-free": "dairy-free",
+    "nut-free": "tree-nut-free",
+    "keto": "keto-friendly",
+    "paleo": "paleo",
+    "low-carb": "low-carb",
+    "low-sugar": "low-sugar",
+    "low-sodium": "low-sodium",
+    "high-protein": "high-protein",
+    "low-fat": "low-fat"
+  },
+  "mealTypes": {
+    "breakfast": ["breakfast", "morning", "brunch"],
+    "lunch": ["lunch", "midday", "noon"],
+    "dinner": ["dinner", "evening", "supper", "night"],
+    "snack": ["snack", "appetizer", "starter"],
+    "dessert": ["dessert", "sweet", "treat"]
+  },
+  "timeKeywords": {
+    "quick": 15,
+    "fast": 20,
+    "under_30": 30,
+    "under_45": 45,
+    "under_60": 60,
+    "hour": 60,
+    "minutes": null
+  }
+}

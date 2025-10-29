@@ -1,0 +1,113 @@
+{
+  "substitutions": {
+    "dairy": [
+      {
+        "ingredient": "milk",
+        "alternatives": [
+          "almond milk (unsweetened)",
+          "oat milk",
+          "coconut milk"
+        ],
+        "notes": "Use 1:1 ratio. Oat milk is great for baking."
+      },
+      {
+        "ingredient": "butter",
+        "alternatives": [
+          "coconut oil",
+          "olive oil",
+          "vegan butter"
+        ],
+        "notes": "Coconut oil works well in baking, olive oil for cooking."
+      },
+      {
+        "ingredient": "cheese",
+        "alternatives": [
+          "nutritional yeast",
+          "vegan cheese",
+          "cashew cream"
+        ],
+        "notes": "Nutritional yeast adds cheesy flavor without dairy."
+      }
+    ],
+    "nuts": [
+      {
+        "ingredient": "almonds",
+        "alternatives": [
+          "sunflower seeds",
+          "pumpkin seeds",
+          "oats"
+        ],
+        "notes": "Sunflower seeds work well in most recipes calling for almonds."
+      },
+      {
+        "ingredient": "peanut butter",
+        "alternatives": [
+          "sunflower seed butter",
+          "soy butter",
+          "tahini"
+        ],
+        "notes": "Sunflower seed butter has a similar texture and taste."
+      }
+    ],
+    "gluten": [
+      {
+        "ingredient": "wheat flour",
+        "alternatives": [
+          "almond flour",
+          "coconut flour",
+          "rice flour"
+        ],
+        "notes": "Almond flour is 1:1, coconut flour needs more liquid."
+      },
+      {
+        "ingredient": "breadcrumbs",
+        "alternatives": [
+          "ground nuts",
+          "coconut flakes",
+          "crushed rice crackers"
+        ],
+        "notes": "Ground nuts add protein and crunch."
+      }
+    ],
+    "eggs": [
+      {
+        "ingredient": "eggs (binding)",
+        "alternatives": [
+          "flax egg (1 tbsp ground flax + 3 tbsp water)",
+          "chia egg (1 tbsp chia seeds + 3 tbsp water)",
+          "applesauce (1/4 cup per egg)"
+        ],
+        "notes": "Let flax/chia eggs sit for 5 minutes before using."
+      },
+      {
+        "ingredient": "eggs (leavening)",
+        "alternatives": [
+          "baking powder + oil",
+          "aquafaba (chickpea liquid)",
+          "vinegar + baking soda"
+        ],
+        "notes": "Aquafaba works great for meringues and mousses."
+      }
+    ],
+    "soy": [
+      {
+        "ingredient": "soy sauce",
+        "alternatives": [
+          "coconut aminos",
+          "tamari (if gluten-free needed)",
+          "liquid aminos"
+        ],
+        "notes": "Coconut aminos are sweeter, use slightly less."
+      },
+      {
+        "ingredient": "tofu",
+        "alternatives": [
+          "tempeh (if soy-free needed)",
+          "chickpea flour",
+          "lentils"
+        ],
+        "notes": "Chickpea flour makes great scrambles and patties."
+      }
+    ]
+  }
+}
