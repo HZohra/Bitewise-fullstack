@@ -4,7 +4,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hi! I'm BiteWise, your dietary companion. I can help you with anyhting food related! What would you like to know?",
+      text: "Hi! I'm BiteWise, your dietary companion. I can help you with anything food related! What would you like to know?",
       sender: 'bot',
       timestamp: new Date()
     }
