@@ -1,4 +1,6 @@
-// Intent detection patterns
+// Intent detection patterns for chatbot to classify user messages into intents before any data extraction or API calls.
+
+
 const INTENT_PATTERNS = {
   quickSearchRecipes: [
     /show me.*recipe/i,

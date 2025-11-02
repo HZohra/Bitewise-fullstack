@@ -1,3 +1,12 @@
+// Main chatbot processing module that integrates intent detection, entity extraction, action execution, and response formatting.
+
+//4 main steps(pipelines):
+//1. Detect user intent from message (Calls detectIntent(text))
+//2. Extract entities from message  (Calls extractEntities(text, profile))
+//3. Execute action based on intent and entities (Calls executeAction(intent, entities, profile))
+//4. Format response to send back to user  (Calls formatResponse(intent, actionResult, entities))
+
+
 import { detectIntent } from './intent-detector.js';
 import { extractEntities } from './entity-extractor.js';
 import { executeAction } from './action-handlers.js';

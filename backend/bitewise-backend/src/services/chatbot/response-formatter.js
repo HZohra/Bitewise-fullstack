@@ -1,3 +1,7 @@
+//This module turns structured action results (from action-handlers.js) 
+//into a single user-facing string that your UI can display. 
+//It’s the last step in the pipeline: intent → entities → action → format → UI.
+
 export function formatResponse(intent, actionResult, entities) {
   switch (actionResult.type) {
     case 'recipe_list':

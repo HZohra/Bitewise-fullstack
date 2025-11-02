@@ -1,8 +1,11 @@
-import fs from 'fs';
-import path from 'path';
+//Parsing user input to extract entities for chatbot actions
 
-const dietaryMappings = JSON.parse(fs.readFileSync(new URL('./data/dietary-mappings.json', import.meta.url), 'utf8'));
-const allergenSignals = JSON.parse(fs.readFileSync(new URL('./data/allergen-signals.json', import.meta.url), 'utf8'));
+import fs from 'fs'; // For file system operations
+import path from 'path'; // Added to handle file paths
+
+
+const dietaryMappings = JSON.parse(fs.readFileSync(new URL('./data/dietary-mappings.json', import.meta.url), 'utf8')); // Dietary tags, meal types, time keywords
+const allergenSignals = JSON.parse(fs.readFileSync(new URL('./data/allergen-signals.json', import.meta.url), 'utf8')); // Allergen signal words
 
 export function extractEntities(text, profile = {}) {
   const lowerText = text.toLowerCase();
@@ -17,13 +20,13 @@ export function extractEntities(text, profile = {}) {
     ingredients: []
   };
 
-  // Extract dietary tags
+  // Extract dietary tags from text and user profile
   entities.dietaryTags = extractDietaryTags(lowerText, profile.diets || []);
   
-  // Extract food topic
+  // Extract food topic 
   entities.foodTopic = extractFoodTopic(lowerText);
   
-  // Extract time limit
+  // Extract time limit 
   entities.timeLimit = extractTimeLimit(lowerText);
   
   // Extract meal type
@@ -60,7 +63,7 @@ function extractDietaryTags(text, userDiets = []) {
 
 function extractFoodTopic(text) {
   // Common food-related keywords to remove
-  const stopWords = ['recipe', 'food', 'meal', 'dish', 'cook', 'make', 'eat', 'dinner', 'lunch', 'breakfast'];
+  const stopWords = ['recipe', 'food', 'meal', 'dish', 'cook', 'make', 'eat', 'dinner', 'lunch', 'breakfast', 'snack', 'healthy', 'quick', 'easy','brunch'];
   
   // Extract potential food topic by removing common words
   let topic = text;
@@ -82,7 +85,7 @@ function extractTimeLimit(text) {
     { pattern: /less\s*than\s*(\d+)/i, multiplier: 1 }
   ];
   
-  for (const { pattern, multiplier } of timePatterns) {
+  for (const { pattern, multiplier } of timePatterns) { // Check each pattern
     const match = text.match(pattern);
     if (match) {
       return parseInt(match[1]) * multiplier;
@@ -129,7 +132,7 @@ function extractDuration(text) {
 
 function extractLocation(text, userLocation = null) {
   // Check for location keywords
-  const locationKeywords = ['near me', 'nearby', 'local', 'here', 'my area'];
+  const locationKeywords = ['near me', 'nearby', 'local', 'here', 'my area', 'around me', 'close by'];
   
   for (const keyword of locationKeywords) {
     if (text.includes(keyword)) {

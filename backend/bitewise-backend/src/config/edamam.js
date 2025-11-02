@@ -1,5 +1,6 @@
-import axios from 'axios';
-import dotenv from 'dotenv';
+
+import axios from 'axios'; // HTTP client request
+import dotenv from 'dotenv'; // Load environment variables
 dotenv.config();
 
 const EDAMAM_BASE_URL = 'https://api.edamam.com/api/recipes/v2';

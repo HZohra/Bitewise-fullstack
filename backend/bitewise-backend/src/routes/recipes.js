@@ -1,3 +1,5 @@
+//server-side recipe search route, lets chatbot or frontend safely talk to Edamam's Recipe API without exposing the private API keys.
+
 import express from 'express';
 import { fetchRecipes } from '../config/edamam.js';
 

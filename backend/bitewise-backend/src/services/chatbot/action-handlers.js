@@ -4,24 +4,26 @@ import fs from 'fs';
 const substitutions = JSON.parse(fs.readFileSync(new URL('./data/substitutions.json', import.meta.url), 'utf8'));
 const allergenSignals = JSON.parse(fs.readFileSync(new URL('./data/allergen-signals.json', import.meta.url), 'utf8'));
 
+// Main function to execute action based on intent
+// and entities extracted from user input
 export async function executeAction(intent, entities, profile) {
   switch (intent) {
-    case 'quickSearchRecipes':
+    case 'quickSearchRecipes': // Search for recipes based on user criteria
       return await quickSearchRecipes(entities, profile);
     
-    case 'quickSearchRestaurants':
+    case 'quickSearchRestaurants': // Search for restaurants based on user criteria
       return await quickSearchRestaurants(entities, profile);
     
-    case 'recipeExplainer':
+    case 'recipeExplainer':  // Explain recipe safety based on allergens
       return await recipeExplainer(entities, profile);
     
-    case 'mealPlanner':
+    case 'mealPlanner':  // Generate meal plan based on user preferences
       return await mealPlanner(entities, profile);
     
-    case 'substitutions':
+    case 'substitutions':  // Provide ingredient substitutions
       return await handleSubstitutions(entities, profile);
     
-    default:
+    default: // Unknown intent
       return {
         type: 'error',
         message: 'I didn\'t understand that. Could you try rephrasing your request?'
@@ -29,6 +31,7 @@ export async function executeAction(intent, entities, profile) {
   }
 }
 
+// Action Handlers
 async function quickSearchRecipes(entities, profile) {
   try {
     // Build search query
