@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+
+const API_BASE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5002';
+
 export default function Chatbot() {
   const [messages, setMessages] = useState([
     {
@@ -36,12 +39,12 @@ export default function Chatbot() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/chat/ask', {
+      const response = await fetch(`${API_BASE}/chat/ask`, {
+
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
+          user_id: 'u1', // Placeholder user ID after implementing auth
           text: inputText,
           profile: {
             diets: [],
@@ -52,7 +55,15 @@ export default function Chatbot() {
         }),
       });
 
-      const data = await response.json();
+      // Handle non-2xx HTTP responses here
+       if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      
+      const data = await response.json().catch(() => ({}));
+      const botText = data?.response || "Sorry, I couldn't find anything for that.";
+
       
       const botMessage = {
         id: Date.now() + 1,
@@ -68,7 +79,7 @@ export default function Chatbot() {
       console.error('Error sending message:', error);
       const errorMessage = {
         id: Date.now() + 1,
-        text: "I have not connected the API yet. lol",
+        text: "I can’t reach the server right now. Please try again.",
         sender: 'bot',
         timestamp: new Date()
       };
@@ -87,9 +98,7 @@ export default function Chatbot() {
 
   const formatMessage = (text) => {
     // Convert markdown-like formatting to JSX
-    return text
-      .split('\n')
-      .map((line, index) => {
+    return text.split('\n').map((line, index) => {
         if (line.startsWith('**') && line.endsWith('**')) {
           return <strong key={index}>{line.slice(2, -2)}</strong>;
         }
