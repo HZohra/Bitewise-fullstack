@@ -16,7 +16,7 @@ It helps users discover recipes, track nutritional information, and make healthi
 - ├── package-lock.json  # Automatically generated file to lock dependency versions
 - └── .vscode/           # VS Code workspace & configurations
 
-## Planned Features
+
 ## Core Functionality
 - 🥗 Edamam API integration — connect to the Edamam API for recipe and nutrition data *(coming soon!)*
 - 👤 User profiles and authentication - allow users to save preferences, dietary restrictions, and favorite recipes.
