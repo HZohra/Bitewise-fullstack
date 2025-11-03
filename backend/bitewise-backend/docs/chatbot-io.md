@@ -17,3 +17,4 @@ Keep this shape stable so the frontend ↔ backend stay in sync.
     "max_time": 30
   }
 }
+

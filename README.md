@@ -71,3 +71,24 @@ It helps users discover recipes, track nutritional information, and make healthi
 - Connect Google Calendar API for meal scheduling.
 - Implement recommendation system (suggest recipes based on user history).
 - Upgrade to an AI-powered intent detector (OpenAI or Hugging Face model)
+
+//================================================
+Recipe Manager:
+🍽️ Recipe Manager Module – Scope & Progress
+#Current Scope (from proposal)
+- Static, searchable recipe database labeled with dietary categories (vegan, gluten-free, etc.).
+- Multi-restriction filtering so users can combine dietary filters for more inclusive results.
+- Community “Add a Recipe” feature allowing uploads tagged with dietary restrictions.
+- Nutrition information integration planned for later implementation.
+- Clear allergy labelling on every recipe for transparency and safety.
+- Edamam API connection for fetching recipe and nutrition data.
+- Backend endpoints (e.g., /recipes) and chatbot integration for recipe search and allergen explanations.
+
+# next steps
+1- Add-a-Recipe form on frontend with upload, labeling, and validation.
+2- Local recipe storage (MongoDB or SQLite) to hold user-submitted recipes.
+3- Nutrition facts display beside each recipe (calories, macros from Edamam API).
+4- User-facing “My Recipes” page to view and edit personal uploads.
+5- Admin moderation or tagging tools for verifying dietary labels.
+6- Enhanced filter UI (checkboxes/tags for diet types and allergens).
+7- Usability testing for clarity of diet/allergy filters and recipe submission flow.
