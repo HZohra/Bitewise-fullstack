@@ -1,0 +1,104 @@
+@startuml
+title BiteWise – Dietary Restriction Meal Matcher Platform
+
+actor "User" as U
+actor "Admin" as A
+
+rectangle BiteWiseSystem {
+    
+    ' === UI LAYER ===
+    class HomeScreen {
+        + displayWelcomeMessage()
+        + showQuickOptions()
+    }
+
+    class SearchModule {
+        + searchRecipes(keyword)
+        + searchRestaurants(keyword)
+    }
+
+    class FavouriteRecipes {
+        + addToFavourites(recipe)
+        + removeFromFavourites(recipe)
+        + viewFavourites()
+    }
+
+    class RestaurantFinder {
+        - location
+        + findRestaurants(filters)
+        + getNearbyRestaurants()
+    }
+
+    class LocationService {
+        + getUserLocation()
+        + setLocationManually()
+    }
+
+    class RecipeManager {
+        - recipeDatabase
+        + filterRecipesByRestriction(restrictions)
+        + addRecipe()
+        + getNutritionInfo()
+    }
+
+    class Chatbot {
+        + processQuery(query)
+        + getRecipeSuggestions()
+        + getRestaurantSuggestions()
+    }
+
+    class UserProfile {
+        - userID
+        - name
+        - email
+        - dietaryRestrictions
+        + updateProfile()
+        + viewSavedRecipes()
+    }
+
+    class Database {
+        + storeUserData()
+        + fetchRecipes()
+        + saveFavourites()
+        + fetchFavourites()
+    }
+
+    class BackendController {
+        + handleRequests()
+        + integrateAPIs()
+    }
+
+    class APIs {
+        + GoogleMapsAPI
+        + YelpAPI
+        + EdamamAPI
+    }
+}
+
+' === RELATIONSHIPS ===
+U --> HomeScreen : interacts with
+U --> SearchModule : searches recipes/restaurants
+U --> FavouriteRecipes : manages favourites
+U --> Chatbot : asks for suggestions
+U --> RestaurantFinder : explores local food
+U --> LocationService : sets or uses location
+U --> UserProfile : updates dietary restrictions
+
+HomeScreen --> SearchModule
+SearchModule --> RecipeManager
+SearchModule --> RestaurantFinder
+RestaurantFinder --> LocationService
+RestaurantFinder --> APIs
+Chatbot --> RecipeManager
+Chatbot --> RestaurantFinder
+FavouriteRecipes --> RecipeManager
+FavouriteRecipes --> Database
+UserProfile --> Database
+RecipeManager --> Database
+BackendController --> RecipeManager
+BackendController --> RestaurantFinder
+BackendController --> Chatbot
+BackendController --> UserProfile
+A --> Database : manages/maintains data
+
+@enduml
