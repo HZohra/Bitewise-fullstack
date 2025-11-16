@@ -41,12 +41,15 @@ function formatRecipeList(result, entities) {
       response += `   🏷️ ${recipe.dietLabels.join(', ')}\n`;
     }
     
-    response += `   🔗 [View Recipe](${recipe.url})\n\n`;
+    const shortIngredients = recipe.ingerdients.slice(0, 5).join(', ');
+    response += `   🧂 Ingredients: ${shortIngredients}...\n\n`;
   });
+  //   response += `   🔗 [View Recipe](${recipe.url})\n\n`;
+  // });
   
-  if (result.totalFound > result.recipes.length) {
-    response += `*Found ${result.totalFound} total recipes. Say "more" to see additional options.*`;
-  }
+  // if (result.totalFound > result.recipes.length) {
+  //   response += `*Found ${result.totalFound} total recipes. Say "more" to see additional options.*`;
+  // }
   
   return response;
 }
