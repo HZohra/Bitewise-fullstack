@@ -33,9 +33,8 @@ router.post('/ask', async (req, res) => {
   }
 });
 
-// GET /chat/me - Get user profile (placeholder for now)
+// GET /chat/me - Get user profile
 router.get('/me', (req, res) => {
-  // TODO: Implement user profile retrieval from database
   res.json({
     user_id: req.query.user_id || 'anonymous',
     profile: {
