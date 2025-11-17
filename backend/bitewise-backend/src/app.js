@@ -10,6 +10,7 @@ import express from 'express'; // Web framework
 import cors from 'cors';  // Enable Cross-Origin Resource Sharing (frontend can talk to backend)
 
 //Routers
+import { connectDB } from "./config/db.js"; // Database connection
 import recipesRouter from './routes/recipes.js'; // Recipe search route
 import chatbotRouter from './routes/chatbot.js'; // Chatbot interaction route
 import authRouter from './routes/auth.js';
@@ -35,6 +36,8 @@ app.use((req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
+connectDB().then(() => {
+  app.listen(PORT, () =>
+    console.log(`Server running on port ${PORT}`)
+  );
+});
