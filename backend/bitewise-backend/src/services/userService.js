@@ -38,3 +38,39 @@ export async function findUserById(id) {
   const user = await User.findById(id).exec();
   return user;
 }
+
+/**
+ * Update user preferences (diets, allergens, maxCookTime).
+ */
+export async function updateUserPreferences(userId, { diets, allergens, maxCookTime }) {
+  const update = {};
+
+  if (diets !== undefined) {
+    update.diets = diets;
+  }
+  if (allergens !== undefined) {
+    update.allergens = allergens;
+  }
+  if (maxCookTime !== undefined) {
+    update.maxCookTime = maxCookTime;
+  }
+
+  const user = await User.findByIdAndUpdate(userId, update, {
+    new: true, // return updated document
+  }).exec();
+
+  return user;
+}
+
+/**
+ * Update user password hash (used by change-password route).
+ */
+export async function updateUserPassword(userId, newPasswordHash) {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { passwordHash: newPasswordHash },
+    { new: true }
+  ).exec();
+
+  return user;
+}

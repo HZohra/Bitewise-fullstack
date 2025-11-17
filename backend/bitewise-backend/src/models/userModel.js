@@ -21,7 +21,25 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+  
+  
+  //preferences for recipes/chatbot
+  diets: {
+      type: [String],
+      default: [], // e.g. ["vegan", "gluten-free"]
+    },
+
+    allergens: {
+      type: [String],
+      default: [], // e.g. ["peanut", "shrimp"]
+    },
+
+    maxCookTime: {
+      type: Number, // in minutes, e.g. 30
+      default: null,
+    },
   },
+  
   {
     timestamps: true, // adds createdAt and updatedAt automatically
   }
