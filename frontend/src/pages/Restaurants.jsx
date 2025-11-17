@@ -37,7 +37,55 @@ export default function Restaurants() {
       address: "321 Weber St, Kitchener",
       coordinates: { lat: 43.4516, lng: -80.4925 },
     },
-  ];
+  {
+    id: 5,
+    name: "PureVegan Deli",
+    description: "100% vegan sandwiches, bowls, and smoothies.",
+    dietTypes: ["Vegan"],
+  },
+  {
+    id: 6,
+    name: "SugarSmart Grill",
+    description: "Delicious meals crafted with low-sugar sauces.",
+    dietTypes: ["Low-Sugar"],
+  },
+  {
+    id: 7,
+    name: "Gluten-Free Pizza Co.",
+    description: "Hand-tossed pizzas made with gluten-free dough.",
+    dietTypes: ["Gluten-Free"],
+  },
+  {
+    id: 8,
+    name: "Harmony Veggie House",
+    description: "Vegetarian comfort food with global flavors.",
+    dietTypes: ["Vegetarian"],
+  },
+  {
+    id: 9,
+    name: "Veg & Go",
+    description: "Fast-casual vegan meals for busy days.",
+    dietTypes: ["Vegan", "Low-Sugar"],
+  },
+  {
+    id: 10,
+    name: "Balanced Bistro",
+    description: "Modern American restaurant with low-sugar options.",
+    dietTypes: ["Low-Sugar", "Vegetarian"],
+  },
+  {
+    id: 11,
+    name: "The Gluten-Free Spot",
+    description: "All bakery items and entrees made gluten-free.",
+    dietTypes: ["Gluten-Free"],
+  },
+  {
+    id: 12,
+    name: "Green Bowl Factory",
+    description: "Customize your bowl with vegan and veggie bases.",
+    dietTypes: ["Vegan", "Vegetarian"],
+  },
+];
 
   // Open directions in GOOGLE MAPS
   const openDirections = (restaurant) => {
@@ -94,7 +142,7 @@ export default function Restaurants() {
                 {restaurant.name}
               </h2>
               <p className="text-gray-600 mt-2">{restaurant.description}</p>
-              <p className="text-sm text-gray-500 mt-2">📍 {restaurant.address}</p>
+              <p className="text-sm text-gray-500 mt-2">{restaurant.address}</p>
 
               <div className="flex flex-wrap gap-2 mt-4">
                 {restaurant.dietTypes.map((diet) => (
@@ -112,7 +160,7 @@ export default function Restaurants() {
                 onClick={() => openDirections(restaurant)}
                 className="mt-4 w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition flex items-center justify-center gap-2"
               >
-                <span>🗺️</span>
+                <span></span>
                 <span>Get Directions</span>
               </button>
             </div>
