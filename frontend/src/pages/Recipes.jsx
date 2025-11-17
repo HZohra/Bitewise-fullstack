@@ -4,16 +4,40 @@ import { useNavigate } from "react-router-dom";
 export default function Recipes() {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("healthy");
+
+  // const [searchTerm, setSearchTerm] = useState("healthy");
+  
+  const [searchTerm, setSearchTerm] = useState(() => {
+    return localStorage.getItem("recipesSearchTerm") || "";
+  });
+
+
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const filters = ["Gluten-Free", "Vegan", "Vegetarian", "Low-Sugar"];
 
-  const APP_ID = import.meta.env.VITE_EDAMAM_APP_ID;
-  const APP_KEY = import.meta.env.VITE_EDAMAM_APP_KEY;
+  //added it here
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    localStorage.setItem("recipesSearchTerm", value);
+  };
 
-  const fetchRecipes = async () => {
+  const handleSearchSubmit = (e) => {
+  e.preventDefault();
+  fetchRecipes();  // run the search only when user clicks Search
+  };
+
+
+  //I think we should remove these, since we do not use it and it expose the API(Zohra)
+  // const APP_ID = import.meta.env.VITE_EDAMAM_APP_ID;
+  // const APP_KEY = import.meta.env.VITE_EDAMAM_APP_KEY;
+
+  const fetchRecipes = async (
+    term = searchTerm,
+   filtersForSearch = selectedFilters
+  ) => {
     setLoading(true);
     try {
       let url = `http://localhost:5002/recipes?q=${encodeURIComponent(searchTerm)}`;
@@ -28,6 +52,10 @@ export default function Recipes() {
       const response = await fetch(url);
       const data = await response.json();
 
+
+      //see exactly what backend returns
+      console.log("Edamam /recipes response:", data);
+
       const mapped = data.hits?.map((hit) => ({
         id: hit.recipe.uri,
         name: hit.recipe.label,
@@ -38,26 +66,35 @@ export default function Recipes() {
         ingredients: hit.recipe.ingredientLines,
         source: hit.recipe.source,
         url: hit.recipe.url,
-      }));
+      })) || [];
 
-      setRecipes(mapped || []);
+      setRecipes(mapped);
     } catch (error) {
       console.error("Error fetching recipes:", error);
     }
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchRecipes();
-  }, [searchTerm, selectedFilters]);
+
+  //this calls API everytime user types a letter - bad for performance
+  // useEffect(() => {
+  //   fetchRecipes();
+  // }, [searchTerm, selectedFilters]);
 
   const toggleFilter = (filter) => {
+    let updatedFilters;
+
     if (selectedFilters.includes(filter)) {
-      setSelectedFilters(selectedFilters.filter((f) => f !== filter));
-    } else {
-      setSelectedFilters([...selectedFilters, filter]);
-    }
-  };
+    updatedFilters = selectedFilters.filter((f) => f !== filter);
+  } else {
+    updatedFilters = [...selectedFilters, filter];
+  }
+
+  setSelectedFilters(updatedFilters);
+
+  // 🔥 immediately search with current text + updated filters
+  fetchRecipes(searchTerm, updatedFilters);
+};
 
   const handleRecipeClick = (recipe) => {
     navigate(`/recipe/${encodeURIComponent(recipe.id)}`, { state: recipe });
@@ -65,13 +102,14 @@ export default function Recipes() {
 
   return (
     <div className="min-h-screen bg-green-50 p-6 relative">
-      {/* Search Bar */}
-      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+    {/* Search Bar */}
+    <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+      <form onSubmit={handleSearchSubmit}>
         <input
           type="text"
           placeholder="What recipe are you looking for?"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchChange}
           className="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
 
@@ -80,6 +118,7 @@ export default function Recipes() {
           {filters.map((filter) => (
             <button
               key={filter}
+              type="button" // ✅ so clicking filter doesn't submit the form
               onClick={() => toggleFilter(filter)}
               className={`px-3 py-1 rounded-full text-sm font-medium border transition
                 ${
@@ -92,7 +131,9 @@ export default function Recipes() {
             </button>
           ))}
         </div>
-      </div>
+      </form>
+    </div>
+
 
       {/* Recipe Grid */}
       {loading ? (

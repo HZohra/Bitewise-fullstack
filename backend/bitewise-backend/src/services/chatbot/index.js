@@ -13,12 +13,31 @@ import { formatResponse } from './response-formatter.js';
 
 export async function processChatMessage(input) {
   const { user_id, text, profile } = input;
-  
+
   try {
+    // ---------------------------------------------------------
+    // 0) Special case: multi-day meal plan requests
+    // ---------------------------------------------------------
+    const lowerText = text.toLowerCase();
+
+    if (lowerText.includes('meal plan') || lowerText.includes('plan my meal')) {
+      const plan = buildTwoDayMealPlan(profile);
+
+      return {
+        user_id: user_id || 'anonymous',
+        response: plan,
+        recipes: []  // you can later attach structured recipes here if you want
+      };
+    }
+
+    // ---------------------------------------------------------
+    // 1) Default path: recipe search via Edamam
+    // ---------------------------------------------------------
+
     // Extract simple query from user text
-    // If user says "Show me a vegan dinner under 30 min", extract "vegan dinner"
+    // Example: "Show me a vegan dinner under 30 min" -> "vegan dinner"
     let query = text;
-    
+
     // Remove common phrases to get cleaner query
     query = query
       .replace(/show me/i, '')
@@ -28,32 +47,32 @@ export async function processChatMessage(input) {
       .replace(/within \d+ min/i, '')
       .replace(/\brecipes?\b/i, '')
       .trim();
-    
+
     // If query is empty, use original text
     if (!query || query.length < 2) {
       query = text;
     }
-    
+
     console.log('Simplified query:', query);
-    
+
     const appId = process.env.EDAMAM_APP_ID;
     const appKey = process.env.EDAMAM_APP_KEY;
-    
+
     const url = new URL('https://api.edamam.com/api/recipes/v2');
     url.searchParams.append('type', 'public');
     url.searchParams.append('q', query);
     url.searchParams.append('app_id', appId);
     url.searchParams.append('app_key', appKey);
-    
+
     console.log('Edamam URL:', url.toString());
-    
+
     const response = await fetch(url.toString());
 
     console.log('Edamam HTTP status:', response.status);
     const data = await response.json();
 
     console.log(
-      'Edamam raw preview:', 
+      'Edamam raw preview:',
       JSON.stringify(data).slice(0, 200)
     );
     console.log('Edamam response hits:', data.hits?.length || 0);
@@ -66,7 +85,7 @@ export async function processChatMessage(input) {
         recipes: []
       };
     }
-    
+
     // Handle no recipes found
     if (!data.hits || data.hits.length === 0) {
       return {
@@ -75,8 +94,8 @@ export async function processChatMessage(input) {
         recipes: []
       };
     }
-    
-    // 👉 Extract richer recipe info (NO URLs, MORE details)
+
+    // Extract richer recipe info (NO URLs, MORE details)
     const recipes = data.hits.slice(0, 3).map(hit => ({
       label: hit.recipe.label,
       time: hit.recipe.totalTime,                       // in minutes
@@ -86,7 +105,7 @@ export async function processChatMessage(input) {
       ingredients: hit.recipe.ingredientLines || []     // full ingredient list
     }));
 
-    // 👉 Build a ChatGPT-style text response (summary + details, no links)
+    // Build a ChatGPT-style text response (summary + details, no links)
     let fullResponse = `Here are ${recipes.length} recipes I found for "${query}":\n\n`;
 
     recipes.forEach((r, index) => {
@@ -122,4 +141,57 @@ export async function processChatMessage(input) {
       recipes: []
     };
   }
+}
+
+// ---------------------------------------------------------
+// Helper: simple static 2-day meal plan (PantryChef-style)
+// ---------------------------------------------------------
+function buildTwoDayMealPlan(profile) {
+  // Later you can use profile (diets, allergens, etc.) to customize this.
+  const text = `
+📅 Day 1
+🥣 Breakfast – Veggie Scramble with Toast & Avocado
+- Eggs or tofu, spinach, bell pepper, onion, whole-grain toast, 1/2 avocado
+- Optional: Add turmeric & cumin for flavor
+- Time: ~15 mins
+
+🍽️ Lunch – Mediterranean Chickpea Salad
+- Chickpeas, cucumber, tomato, red onion, olives, feta (or vegan alternative), lemon–olive oil dressing
+- Serve chilled or at room temperature
+- Prep time: ~10 mins (no cooking)
+
+🍲 Dinner – Vegetable Spaghetti with Zucchini, Tomato & Garlic
+- Whole wheat spaghetti, sautéed zucchini, cherry tomatoes, garlic, olive oil, basil
+- Optional: Grated Parmesan or nutritional yeast
+- Time: ~25 mins
+
+🍎 Snack – Greek yogurt with honey and chia seeds
+- Use dairy-free yogurt if needed
+
+
+
+📅 Day 2
+🥣 Breakfast – Overnight Oats with Banana & Peanut Butter
+- Rolled oats, plant milk, banana, peanut butter, cinnamon
+- Prep the night before, eat in the morning
+- Hands-on time: ~2 mins (night before)
+
+🍽️ Lunch – Quinoa Buddha Bowl
+- Cooked quinoa, roasted sweet potato, steamed broccoli, edamame, tahini dressing
+- Optional: Sesame seeds or chopped nuts on top
+- Time: ~30 mins (can be meal-prepped)
+
+🍲 Dinner – Lentil Curry with Rice
+- Brown or red lentils, tomatoes, onion, garlic, ginger, coconut milk, curry spices
+- Serve with basmati rice or naan
+- Time: ~30 mins
+
+🍇 Snack – Mixed nuts + 1 apple
+- Optional: a small square of dark chocolate
+
+
+💡 Tip: If you tell me your goals (weight loss, high-protein, vegetarian, etc.), I can adjust this plan to fit you better.
+`.trim();
+
+  return text;
 }

@@ -92,3 +92,11 @@ Recipe Manager:
 5- Admin moderation or tagging tools for verifying dietary labels.
 6- Enhanced filter UI (checkboxes/tags for diet types and allergens).
 7- Usability testing for clarity of diet/allergy filters and recipe submission flow.
+
+
+
+//
+how should we use MongoDB
+1.Stores User Profile + Allergies
+2.Store User Search history or Fav ingredients
+3.create Dynamic filtering engine ()
