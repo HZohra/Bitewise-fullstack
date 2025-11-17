@@ -1,5 +1,5 @@
 import express from 'express';
-import { processChatMessage } from '../services/chatbot/index.js';
+import { processChatMessage } from '../chatbot/chatbot/index.js';
 
 const router = express.Router();
 
