@@ -15,7 +15,20 @@ export default function Recipes() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const filters = ["Gluten-Free", "Vegan", "Vegetarian", "Low-Sugar"];
+  const filters = [
+    "Gluten-Free", 
+    "Vegan", 
+    "Vegetarian", 
+    "Low-Sugar",
+    "Dairy-Free",
+    "Egg-Free",
+    "Peanut-Free",
+    "Tree-Nut-Free",
+    "Soy-Free",
+    "Paleo",
+    "Keto-Friendly",
+    "Low-Sodium"
+  ];
 
   //added it here
   const handleSearchChange = (e) => {
@@ -27,6 +40,13 @@ export default function Recipes() {
   const handleSearchSubmit = (e) => {
   e.preventDefault();
   fetchRecipes();  // run the search only when user clicks Search
+  };
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setSelectedFilters([]);
+    localStorage.removeItem("recipesSearchTerm");
+    setRecipes([]);  // Clear current recipes
   };
 
 
@@ -44,7 +64,7 @@ export default function Recipes() {
 
       if (selectedFilters.length > 0) {
       const filterString = selectedFilters
-        .map((f) => f.toLowerCase().replace(" ", "-"))
+        .map((f) => f.toLowerCase().replace(/\s+/g, "-"))
         .join(",");
       url += `&filters=${filterString}`;
 }
@@ -92,7 +112,7 @@ export default function Recipes() {
 
   setSelectedFilters(updatedFilters);
 
-  // 🔥 immediately search with current text + updated filters
+  // immediately search with current text + updated filters
   fetchRecipes(searchTerm, updatedFilters);
 };
 
@@ -105,20 +125,29 @@ export default function Recipes() {
     {/* Search Bar */}
     <div className="bg-white rounded-xl shadow-md p-4 mb-6">
       <form onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          placeholder="What recipe are you looking for?"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="What recipe are you looking for?"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="flex-1 p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition font-medium whitespace-nowrap"
+          >
+            Reset Filters
+          </button>
+        </div>
 
         {/* Filter Tags */}
-        <div className="flex flex-wrap gap-2 mt-3">
+        <div className="flex flex-wrap gap-2 mt-3 max-h-32 overflow-y-auto">
           {filters.map((filter) => (
             <button
               key={filter}
-              type="button" // ✅ so clicking filter doesn't submit the form
+              type="button" // so clicking filter doesn't submit the form
               onClick={() => toggleFilter(filter)}
               className={`px-3 py-1 rounded-full text-sm font-medium border transition
                 ${

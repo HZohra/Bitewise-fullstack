@@ -14,7 +14,7 @@ async function searchEdamamRecipes(query) {
       },
     });
 
-    // 🔍 This is the "where should I put this?" part:
+    // This is the "where should I put this?" part:
     console.log("Edamam status:", response.status);
     console.log(
       "Edamam preview:",

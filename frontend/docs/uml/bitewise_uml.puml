@@ -5,77 +5,78 @@ actor "User" as U
 actor "Admin" as A
 
 rectangle BiteWiseSystem {
-    
-    ' === UI LAYER ===
-    class HomeScreen {
-        + displayWelcomeMessage()
-        + showQuickOptions()
-    }
 
-    class SearchModule {
-        + searchRecipes(keyword)
-        + searchRestaurants(keyword)
-    }
-
-    class FavouriteRecipes {
-        + addToFavourites(recipe)
-        + removeFromFavourites(recipe)
-        + viewFavourites()
-    }
-
-    class RestaurantFinder {
-        - location
-        + findRestaurants(filters)
-        + getNearbyRestaurants()
-    }
-
-    class LocationService {
-        + getUserLocation()
-        + setLocationManually()
-    }
-
-    class RecipeManager {
-        - recipeDatabase
-        + filterRecipesByRestriction(restrictions)
-        + addRecipe()
-        + getNutritionInfo()
-    }
-
-    class Chatbot {
-        + processQuery(query)
-        + getRecipeSuggestions()
-        + getRestaurantSuggestions()
-    }
-
-    class UserProfile {
-        - userID
-        - name
-        - email
-        - dietaryRestrictions
-        + updateProfile()
-        + viewSavedRecipes()
-    }
-
-    class Database {
-        + storeUserData()
-        + fetchRecipes()
-        + saveFavourites()
-        + fetchFavourites()
-    }
-
-    class BackendController {
-        + handleRequests()
-        + integrateAPIs()
-    }
-
-    class APIs {
-        + GoogleMapsAPI
-        + YelpAPI
-        + EdamamAPI
-    }
+'=== UI LAYER ===
+class HomeScreen {
+  + displayWelcomeMessage()
+  + showQuickOptions()
 }
 
-' === RELATIONSHIPS ===
+class SearchModule {
+  + searchRecipes(keyword)
+  + searchRestaurants(keyword)
+}
+
+class FavouriteRecipes {
+  + addToFavourites(recipe)
+  + removeFromFavourites(recipe)
+  + viewFavourites()
+}
+
+class RestaurantFinder {
+  - location
+  + findRestaurants(filters)
+  + getNearbyRestaurants()
+}
+
+class LocationService {
+  + getUserLocation()
+  + setLocationManually()
+}
+
+class RecipeManager {
+  - recipeDatabase
+  + filterRecipesByRestriction(restrictions)
+  + addRecipe()
+  + getNutritionInfo()
+}
+
+class Chatbot {
+  + processQuery(query)
+  + getRecipeSuggestions()
+  + getRestaurantSuggestions()
+}
+
+class UserProfile {
+  - userID
+  - name
+  - email
+  - dietaryRestrictions
+  + updateProfile()
+  + viewSavedRecipes()
+}
+
+class Database {
+  + storeUserData()
+  + fetchRecipes()
+  + saveFavourites()
+  + fetchFavourites()
+}
+
+class BackendController {
+  + handleRequests()
+  + integrateAPIs()
+}
+
+class APIs {
+  + GoogleMapsAPI()
+  + YelpAPI()
+  + EdamamAPI()
+}
+
+} ' end rectangle
+
+'=== RELATIONSHIPS ===
 U --> HomeScreen : interacts with
 U --> SearchModule : searches recipes/restaurants
 U --> FavouriteRecipes : manages favourites
@@ -102,3 +103,4 @@ BackendController --> UserProfile
 A --> Database : manages/maintains data
 
 @enduml
+

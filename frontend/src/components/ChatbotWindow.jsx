@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5002";
 
 export default function ChatbotWindow({ compact = false }) {
-  const userName = "Zohra"; // 👈 name shown on user messages
+  const userName = "Zohra"; // name shown on user messages
 
   const [messages, setMessages] = useState([
     {

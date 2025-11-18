@@ -9,6 +9,9 @@ router.get("/", async (req, res) => {
     const { q, filters } = req.query;
 
     const dietFilters = filters ? String(filters).split(",") : [];
+    
+    console.log('Recipe search query:', q);
+    console.log('Requested filters:', dietFilters);
 
     const data = await fetchRecipes(q, dietFilters);
 
@@ -23,7 +26,7 @@ router.get("/", async (req, res) => {
       error.response?.data || error.message
     );
 
-    // 🔴 Edamam rate limit reached
+    // Edamam rate limit reached
     if (status === 429) {
       // Option A: just send an error
       return res
