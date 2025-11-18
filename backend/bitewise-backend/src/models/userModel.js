@@ -21,31 +21,36 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-  
-  
-  //preferences for recipes/chatbot
-  diets: {
+
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
+
+    // preferences for recipes/chatbot
+    diets: {
       type: [String],
-      default: [], // e.g. ["vegan", "gluten-free"]
+      default: [],
     },
 
     allergens: {
       type: [String],
-      default: [], // e.g. ["peanut", "shrimp"]
+      default: [],
     },
 
     maxCookTime: {
-      type: Number, // in minutes, e.g. 30
+      type: Number,
       default: null,
     },
   },
-  
+
   {
-    timestamps: true, // adds createdAt and updatedAt automatically
+    timestamps: true,
   }
 );
 
-userSchema.index({ email: 1 }, { unique: true });
-
 export const User = mongoose.model("User", userSchema);
-
