@@ -14,7 +14,7 @@ import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-
+import ChatbotWidget from "./components/ChatbotWidget.jsx";
 function App() {
   return (
     <div className="min-h-screen bg-green-50 text-gray-900">
@@ -55,6 +55,7 @@ function App() {
           />
         </Routes>
       </div>
+      <ChatbotWidget />
     </div>
   );
 }

@@ -32,9 +32,9 @@ export default function NavBar() {
         <Link to="/add" className="hover:text-orange-300">
           Add Recipe
         </Link>
-        <Link to="/chatbot" className="hover:text-orange-300">
+        {/* <Link to="/chatbot" className="hover:text-orange-300">
           Chatbot
-        </Link>
+        </Link> */}
 
         {/* Auth-aware section */}
         {user ? (
@@ -56,18 +56,15 @@ export default function NavBar() {
           </>
         ) : (
           <>
+            {/* ONLY show Login */}
             <Link
               to="/login"
               className="ml-4 px-3 py-1 rounded-md bg-white text-teal-600 text-sm font-medium hover:bg-orange-300 hover:text-teal-900"
             >
               Login
             </Link>
-            <Link
-              to="/register"
-              className="px-3 py-1 rounded-md border border-white text-sm hover:bg-orange-300"
-            >
-              Register
-            </Link>
+
+            {/* Register link removed completely */}
           </>
         )}
       </div>
