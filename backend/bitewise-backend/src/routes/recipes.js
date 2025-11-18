@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
       error.response?.data || error.message
     );
 
-    // 🔴 Edamam rate limit reached
+    // Edamam rate limit reached
     if (status === 429) {
       // Option A: just send an error
       return res

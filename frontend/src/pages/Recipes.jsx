@@ -112,7 +112,7 @@ export default function Recipes() {
 
   setSelectedFilters(updatedFilters);
 
-  // 🔥 immediately search with current text + updated filters
+  // immediately search with current text + updated filters
   fetchRecipes(searchTerm, updatedFilters);
 };
 
@@ -147,7 +147,7 @@ export default function Recipes() {
           {filters.map((filter) => (
             <button
               key={filter}
-              type="button" // ✅ so clicking filter doesn't submit the form
+              type="button" // so clicking filter doesn't submit the form
               onClick={() => toggleFilter(filter)}
               className={`px-3 py-1 rounded-full text-sm font-medium border transition
                 ${
