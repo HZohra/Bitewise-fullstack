@@ -15,7 +15,20 @@ export default function Recipes() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const filters = ["Gluten-Free", "Vegan", "Vegetarian", "Low-Sugar"];
+  const filters = [
+    "Gluten-Free", 
+    "Vegan", 
+    "Vegetarian", 
+    "Low-Sugar",
+    "Dairy-Free",
+    "Egg-Free",
+    "Peanut-Free",
+    "Tree-Nut-Free",
+    "Soy-Free",
+    "Paleo",
+    "Keto-Friendly",
+    "Low-Sodium"
+  ];
 
   //added it here
   const handleSearchChange = (e) => {
@@ -44,7 +57,7 @@ export default function Recipes() {
 
       if (selectedFilters.length > 0) {
       const filterString = selectedFilters
-        .map((f) => f.toLowerCase().replace(" ", "-"))
+        .map((f) => f.toLowerCase().replace(/\s+/g, "-"))
         .join(",");
       url += `&filters=${filterString}`;
 }
@@ -114,7 +127,7 @@ export default function Recipes() {
         />
 
         {/* Filter Tags */}
-        <div className="flex flex-wrap gap-2 mt-3">
+        <div className="flex flex-wrap gap-2 mt-3 max-h-32 overflow-y-auto">
           {filters.map((filter) => (
             <button
               key={filter}

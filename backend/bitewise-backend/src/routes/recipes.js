@@ -9,6 +9,9 @@ router.get("/", async (req, res) => {
     const { q, filters } = req.query;
 
     const dietFilters = filters ? String(filters).split(",") : [];
+    
+    console.log('Recipe search query:', q);
+    console.log('Requested filters:', dietFilters);
 
     const data = await fetchRecipes(q, dietFilters);
 
