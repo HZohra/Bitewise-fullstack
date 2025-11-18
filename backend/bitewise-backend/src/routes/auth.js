@@ -20,12 +20,32 @@ import { User } from "../models/userModel.js";
 const router = express.Router();
 
 /**
+ * Helper: check password strength
+ * Returns array of error messages (empty array means valid).
+ */
+function validatePasswordStrength(password) {
+  const errors = [];
+
+  if (!password || password.length < 8) {
+    errors.push("at least 8 characters");
+  }
+  if (!/\d/.test(password)) {
+    errors.push("at least one number");
+  }
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    errors.push("at least one special character");
+  }
+
+  return errors;
+}
+
+/**
  * POST /auth/register
- * Body: { name, email, password }
+ * Body: { name, email, password, birthDate?, phone? }
  */
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, birthDate, phone } = req.body;
 
     // 1. Basic validation
     if (!name || !email || !password) {
@@ -34,9 +54,13 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    if (password.length < 8) {
+    const pwErrors = validatePasswordStrength(password);
+    if (pwErrors.length > 0) {
       return res.status(400).json({
-        error: "Password must be at least 8 characters long.",
+        error:
+          "Password must have " +
+          pwErrors.join(", ") +
+          ".",
       });
     }
 
@@ -51,22 +75,35 @@ router.post("/register", async (req, res) => {
     // 3. Hash the password
     const passwordHash = await hashPassword(password);
 
-    // 4. Create the user (stored via userService)
+    // 4. Normalize birthDate if provided
+    let parsedBirthDate = null;
+    if (birthDate) {
+      const d = new Date(birthDate);
+      if (!isNaN(d.getTime())) {
+        parsedBirthDate = d;
+      }
+    }
+
+    // 5. Create the user (stored via userService)
     const user = await createUser({
       name,
       email,
       passwordHash,
+      birthDate: parsedBirthDate,
+      phone,
     });
 
-    // 5. Create a JWT token
+    // 6. Create a JWT token
     const token = createToken(user);
 
-    // 6. Send back safe user info + token
+    // 7. Send back safe user info + token
     return res.status(201).json({
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
+        birthDate: user.birthDate,
+        phone: user.phone,
       },
       token,
     });
@@ -119,6 +156,8 @@ router.post("/login", async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        birthDate: user.birthDate,
+        phone: user.phone,
       },
       token,
     });
@@ -147,6 +186,8 @@ router.get("/me", requireAuth, async (req, res) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      birthDate: user.birthDate,
+      phone: user.phone,
       diets: user.diets,
       allergens: user.allergens,
       maxCookTime: user.maxCookTime,
@@ -181,6 +222,8 @@ router.patch("/me/preferences", requireAuth, async (req, res) => {
       id: updatedUser.id,
       name: updatedUser.name,
       email: updatedUser.email,
+      birthDate: updatedUser.birthDate,
+      phone: updatedUser.phone,
       diets: updatedUser.diets,
       allergens: updatedUser.allergens,
       maxCookTime: updatedUser.maxCookTime,
@@ -206,9 +249,13 @@ router.post("/change-password", requireAuth, async (req, res) => {
       });
     }
 
-    if (newPassword.length < 8) {
+    const pwErrors = validatePasswordStrength(newPassword);
+    if (pwErrors.length > 0) {
       return res.status(400).json({
-        error: "New password must be at least 8 characters long.",
+        error:
+          "New password must have " +
+          pwErrors.join(", ") +
+          ".",
       });
     }
 
@@ -249,7 +296,7 @@ router.post("/forgot-password", async (req, res) => {
       return res.status(400).json({ error: "Email is required." });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     // For security, always respond 200
     if (!user) {
@@ -273,7 +320,7 @@ router.post("/forgot-password", async (req, res) => {
     const frontendURL = process.env.FRONTEND_URL || "http://localhost:5173";
     const resetUrl = `${frontendURL}/reset-password/${resetToken}`;
 
-    // TODO: email resetUrl to user; for now we just return it
+    // TODO: send resetUrl via email
     return res.status(200).json({
       message:
         "If an account with that email exists, a reset link has been sent.",
@@ -299,9 +346,13 @@ router.post("/reset-password", async (req, res) => {
         .json({ error: "Token and new password are required." });
     }
 
-    if (newPassword.length < 8) {
+    const pwErrors = validatePasswordStrength(newPassword);
+    if (pwErrors.length > 0) {
       return res.status(400).json({
-        error: "New password must be at least 8 characters long.",
+        error:
+          "New password must have " +
+          pwErrors.join(", ") +
+          ".",
       });
     }
 

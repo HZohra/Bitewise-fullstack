@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+// src/App.jsx
+import { Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
 
 import Home from "./pages/Home";
@@ -15,12 +16,21 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ChatbotWidget from "./components/ChatbotWidget.jsx";
+
 function App() {
+  const location = useLocation();
+
+  // Routes where navbar + chatbot should be hidden
+  const authRoutes = ["/login", "/register", "/forgot-password"];
+  const hideNav = authRoutes.includes(location.pathname);
+
   return (
     <div className="min-h-screen bg-green-50 text-gray-900">
-      <NavBar />
+      {/* Show NavBar ONLY if not on auth pages */}
+      {!hideNav && <NavBar />}
 
-      <div className="p-6">
+      {/* Page content */}
+      <div className={hideNav ? "" : "p-6"}>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -29,7 +39,6 @@ function App() {
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-
 
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
@@ -55,7 +64,9 @@ function App() {
           />
         </Routes>
       </div>
-      <ChatbotWidget />
+
+      {/* Show Chatbot widget ONLY if not on auth pages */}
+      {!hideNav && <ChatbotWidget />}
     </div>
   );
 }

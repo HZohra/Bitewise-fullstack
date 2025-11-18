@@ -6,7 +6,7 @@ export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Width changes when expanded; height is limited by max-h on the container
+  // Width changes when expanded; height is controlled by max-h on the container
   const containerSize = isExpanded ? "w-[480px]" : "w-96";
 
   return (
@@ -52,8 +52,8 @@ export default function ChatbotWidget() {
             </div>
           </div>
 
-          {/* Chat content */}
-          <div className="p-3 flex-1">
+          {/* Chat content wrapper – THIS is the important change: min-h-0 */}
+          <div className="p-3 flex-1 min-h-0">
             {/* compact=true for widget version */}
             <ChatbotWindow compact={true} />
           </div>

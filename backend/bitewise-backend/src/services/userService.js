@@ -7,13 +7,17 @@ import { User } from "../models/userModel.js";
  * @param {string} params.name
  * @param {string} params.email
  * @param {string} params.passwordHash
+ * @param {Date|string} [params.birthDate]
+ * @param {string} [params.phone]
  * @returns {Promise<Object>} created user document
  */
-export async function createUser({ name, email, passwordHash }) {
+export async function createUser({ name, email, passwordHash, birthDate, phone }) {
   const user = await User.create({
     name,
     email,
     passwordHash,
+    birthDate,
+    phone,
   });
 
   return user;

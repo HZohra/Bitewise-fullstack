@@ -22,6 +22,18 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    // NEW FIELDS
+    birthDate: {
+      type: Date,
+      default: null,
+    },
+
+    phone: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+
     resetPasswordToken: {
       type: String,
       default: null,
