@@ -42,6 +42,13 @@ export default function Recipes() {
   fetchRecipes();  // run the search only when user clicks Search
   };
 
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setSelectedFilters([]);
+    localStorage.removeItem("recipesSearchTerm");
+    setRecipes([]);  // Clear current recipes
+  };
+
 
   //I think we should remove these, since we do not use it and it expose the API(Zohra)
   // const APP_ID = import.meta.env.VITE_EDAMAM_APP_ID;
@@ -118,13 +125,22 @@ export default function Recipes() {
     {/* Search Bar */}
     <div className="bg-white rounded-xl shadow-md p-4 mb-6">
       <form onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          placeholder="What recipe are you looking for?"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="What recipe are you looking for?"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="flex-1 p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition font-medium whitespace-nowrap"
+          >
+            Reset Filters
+          </button>
+        </div>
 
         {/* Filter Tags */}
         <div className="flex flex-wrap gap-2 mt-3 max-h-32 overflow-y-auto">
