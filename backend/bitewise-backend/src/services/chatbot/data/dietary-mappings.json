@@ -15,7 +15,10 @@
     "shellfish-free": "shellfish-free",
     "crustacean-free": "crustacean-free",
     "fish-free": "fish-free",
-    "mollusk-free": "mollusk-free"
+    "mollusk-free": "mollusk-free",
+    "egg-free": "egg-free",
+    "soy-free": "soy-free",
+    "sesame-free": "sesame-free"
   },
   "mealTypes": {
     "breakfast": ["breakfast", "morning", "brunch"],
