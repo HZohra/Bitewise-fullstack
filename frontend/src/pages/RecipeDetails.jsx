@@ -26,7 +26,7 @@ export default function RecipeDetails() {
         className="w-full h-64 object-cover rounded-lg mb-4"
       />
 
-      /*  Added recipe metadata section */
+    
       <div className="bg-white rounded-xl shadow p-4 mb-4">
         <p className="text-sm text-gray-700">
           <strong>Servings:</strong> {recipe.yield || "N/A"}
@@ -43,7 +43,7 @@ export default function RecipeDetails() {
         </p>
       </div>
 
-      /*  Updated ingredients section */
+    
       <div className="bg-white rounded-xl shadow p-4 mb-4">
         <h2 className="font-semibold text-lg mb-2">Ingredients</h2>
         <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
@@ -53,7 +53,7 @@ export default function RecipeDetails() {
         </ul>
       </div>
 
-      /*  Added full nutrients list */
+    
       <div className="bg-white rounded-xl shadow p-4 mb-4">
         <h2 className="font-semibold text-lg mb-2">Nutritional Information</h2>
         <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
@@ -67,7 +67,7 @@ export default function RecipeDetails() {
         </div>
       </div>
 
-      /*  Added health & diet labels */
+  
       <div className="bg-white rounded-xl shadow p-4 mb-4">
         <h2 className="font-semibold text-lg mb-2">Tags</h2>
         <div className="flex flex-wrap gap-2">
@@ -90,7 +90,7 @@ export default function RecipeDetails() {
         </div>
       </div>
 
-      /*  Added preparation tips / source info */
+    
       <div className="bg-white rounded-xl shadow p-4">
         <h2 className="font-semibold text-lg mb-2">Preparation Details</h2>
         <p className="text-sm text-gray-600">
@@ -100,8 +100,10 @@ export default function RecipeDetails() {
         <p className="text-sm text-gray-600">
           <strong>Source:</strong> {recipe.source || "N/A"}
         </p>
-
-        /*  Previously just a link, now link is optional */
+        <p className="text-sm text-gray-700">
+        Edamam does not provide step-by-step instructions. Please visit the source below for full preparation details.
+        </p>
+      
         {recipe.url && (
           <p className="text-sm mt-1">
             <a
