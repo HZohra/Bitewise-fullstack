@@ -69,8 +69,6 @@ class BackendController {
 }
 
 class APIs {
-  + GoogleMapsAPI()
-  + YelpAPI()
   + EdamamAPI()
 }
 
