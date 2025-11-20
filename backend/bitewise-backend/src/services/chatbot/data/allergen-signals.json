@@ -1,0 +1,35 @@
+{
+  "allergenSignals": {
+    "dairy": [
+      "milk", "cheese", "butter", "cream", "yogurt", "whey", "casein", 
+      "lactose", "sour cream", "ice cream", "ghee", "buttermilk"
+    ],
+    "nuts": [
+      "almond", "walnut", "pecan", "cashew", "pistachio", "hazelnut", 
+      "macadamia", "brazil nut", "pine nut", "nut", "nuts"
+    ],
+    "gluten": [
+      "wheat", "flour", "bread", "pasta", "barley", "rye", "oats", 
+      "gluten", "semolina", "bulgur", "couscous"
+    ],
+    "eggs": [
+      "egg", "eggs", "mayonnaise", "mayo", "custard", "meringue", 
+      "albumen", "yolk", "egg white"
+    ],
+    "soy": [
+      "soy", "soybean", "tofu", "tempeh", "miso", "soy sauce", 
+      "tamari", "edamame", "soy milk"
+    ],
+    "shellfish": [
+      "shrimp", "crab", "lobster", "scallop", "oyster", "mussel", 
+      "clam", "shellfish", "seafood"
+    ],
+    "sesame": [
+      "sesame", "tahini", "sesame oil", "sesame seed"
+    ],
+    "alcohol": [
+      "wine", "beer", "liquor", "alcohol", "rum", "vodka", "whiskey", 
+      "brandy", "cognac", "sherry", "vermouth"
+    ]
+  }
+}
