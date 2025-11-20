@@ -26,7 +26,25 @@ export default function RecipeDetails() {
         className="w-full h-64 object-cover rounded-lg mb-4"
       />
 
-      <div className="bg-white rounded-xl shadow p-4">
+      /*  Added recipe metadata section */
+      <div className="bg-white rounded-xl shadow p-4 mb-4">
+        <p className="text-sm text-gray-700">
+          <strong>Servings:</strong> {recipe.yield || "N/A"}
+        </p>
+        <p className="text-sm text-gray-700">
+          <strong>Cuisine Type:</strong>{" "}
+          {recipe.cuisineType?.join(", ") || "N/A"}
+        </p>
+        <p className="text-sm text-gray-700">
+          <strong>Meal Type:</strong> {recipe.mealType?.join(", ") || "N/A"}
+        </p>
+        <p className="text-sm text-gray-700">
+          <strong>Dish Type:</strong> {recipe.dishType?.join(", ") || "N/A"}
+        </p>
+      </div>
+
+      /*  Updated ingredients section */
+      <div className="bg-white rounded-xl shadow p-4 mb-4">
         <h2 className="font-semibold text-lg mb-2">Ingredients</h2>
         <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
           {recipe.ingredients.map((ingredient, index) => (
@@ -35,25 +53,67 @@ export default function RecipeDetails() {
         </ul>
       </div>
 
-      <div className="mt-4 text-sm text-gray-600">
-        <p>
-          <strong>Calories:</strong> {recipe.calories}
+      /*  Added full nutrients list */
+      <div className="bg-white rounded-xl shadow p-4 mb-4">
+        <h2 className="font-semibold text-lg mb-2">Nutritional Information</h2>
+        <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
+          {recipe.totalNutrients &&
+            Object.entries(recipe.totalNutrients).map(([key, nutrient]) => (
+              <p key={key}>
+                <strong>{nutrient.label}:</strong>{" "}
+                {Math.round(nutrient.quantity)} {nutrient.unit}
+              </p>
+            ))}
+        </div>
+      </div>
+
+      /*  Added health & diet labels */
+      <div className="bg-white rounded-xl shadow p-4 mb-4">
+        <h2 className="font-semibold text-lg mb-2">Tags</h2>
+        <div className="flex flex-wrap gap-2">
+          {recipe.healthLabels?.map((label) => (
+            <span
+              key={label}
+              className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-xs font-medium"
+            >
+              {label}
+            </span>
+          ))}
+          {recipe.dietLabels?.map((label) => (
+            <span
+              key={label}
+              className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium"
+            >
+              {label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      /*  Added preparation tips / source info */
+      <div className="bg-white rounded-xl shadow p-4">
+        <h2 className="font-semibold text-lg mb-2">Preparation Details</h2>
+        <p className="text-sm text-gray-600">
+          <strong>Total Time:</strong>{" "}
+          {recipe.totalTime ? `${recipe.totalTime} mins` : "N/A"}
         </p>
-        <p>
-          <strong>Diet Labels:</strong>{" "}
-          {recipe.dietLabels?.length ? recipe.dietLabels.join(", ") : "N/A"}
+        <p className="text-sm text-gray-600">
+          <strong>Source:</strong> {recipe.source || "N/A"}
         </p>
-        <p>
-          <strong>Source:</strong>{" "}
-          <a
-            href={recipe.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-teal-600 underline"
-          >
-            View full recipe
-          </a>
-        </p>
+
+        /*  Previously just a link, now link is optional */
+        {recipe.url && (
+          <p className="text-sm mt-1">
+            <a
+              href={recipe.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-teal-600 underline"
+            >
+              View original recipe source ↗
+            </a>
+          </p>
+        )}
       </div>
     </div>
   );

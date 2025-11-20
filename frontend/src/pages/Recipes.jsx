@@ -92,6 +92,12 @@ export default function Recipes() {
         dietLabels: hit.recipe.dietLabels,
         healthLabels: hit.recipe.healthLabels,
         ingredients: hit.recipe.ingredientLines,
+        totalNutrients: hit.recipe.totalNutrients,  
+        cuisineType: hit.recipe.cuisineType,        
+        mealType: hit.recipe.mealType,             
+        dishType: hit.recipe.dishType,            
+        yield: hit.recipe.yield,                   
+        totalTime: hit.recipe.totalTime,          
         source: hit.recipe.source,
         url: hit.recipe.url,
       })) || [];
