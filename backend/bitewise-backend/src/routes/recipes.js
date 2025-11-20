@@ -1,5 +1,6 @@
 import express from "express";
 import { fetchRecipes } from "../config/edamam.js";
+import { Recipe } from "../models/recipeModel.js";
 
 const router = express.Router();
 
@@ -13,50 +14,75 @@ router.get("/", async (req, res) => {
     console.log('Recipe search query:', q);
     console.log('Requested filters:', dietFilters);
 
-    const data = await fetchRecipes(q, dietFilters);
-
-    // data is the raw Edamam response (with "hits")
-    res.json(data);
-  } catch (error) {
-    const status = error.response?.status;
-
-    console.error(
-      "Error in /recipes route:",
-      status,
-      error.response?.data || error.message
-    );
-
-    // Edamam rate limit reached
-    if (status === 429) {
-      // Option A: just send an error
-      return res
-        .status(429)
-        .json({ error: "Edamam rate limit reached. Please try again later." });
-
-      // Option B (if you want to keep testing UI):
-      // return res.json({
-      //   hits: [
-      //     {
-      //       recipe: {
-      //         uri: "mock-1",
-      //         label: "Mock Healthy Recipe",
-      //         image: "https://via.placeholder.com/300",
-      //         calories: 500,
-      //         dietLabels: ["Low-Fat"],
-      //         healthLabels: ["Vegetarian"],
-      //         ingredientLines: ["1 cup mock ingredient"],
-      //         source: "Mock Source",
-      //         url: "#",
-      //       },
-      //     },
-      //   ],
-      // });
+    // Fetch Edamam recipes
+    let edamamHits = [];
+    try {
+      const data = await fetchRecipes(q, dietFilters);
+      edamamHits = data.hits || [];
+    } catch (error) {
+      console.error("Error fetching from Edamam:", error.message);
+      // Continue even if Edamam fails - we can still show user recipes
     }
 
-    // Any other error
+    // Fetch user-created recipes from MongoDB
+    let userRecipes = [];
+    try {
+      const query = {};
+      
+      // Search by title or ingredients if search term provided
+      if (q && q.trim()) {
+        query.$or = [
+          { title: { $regex: q, $options: 'i' } },
+          { ingredients: { $regex: q, $options: 'i' } }
+        ];
+      }
+
+      userRecipes = await Recipe.find(query).exec();
+
+      // Apply diet/health filters to user recipes
+      if (dietFilters.length > 0) {
+        userRecipes = userRecipes.filter(recipe => {
+          const recipeLabels = [
+            ...(recipe.dietLabels || []),
+            ...(recipe.healthLabels || [])
+          ].map(label => label.toLowerCase().replace(/\s+/g, '-'));
+
+          return dietFilters.some(filter => 
+            recipeLabels.includes(filter.toLowerCase())
+          );
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user recipes:", error.message);
+    }
+
+    // Transform user recipes to match Edamam format
+    const userRecipeHits = userRecipes.map(recipe => ({
+      recipe: {
+        uri: `user-recipe-${recipe._id}`,
+        label: recipe.title,
+        image: recipe.image || 'https://via.placeholder.com/300?text=No+Image',
+        calories: 0, // User recipes don't have calories calculated
+        dietLabels: recipe.dietLabels || [],
+        healthLabels: recipe.healthLabels || [],
+        ingredientLines: recipe.ingredients || [],
+        source: 'User Recipe',
+        url: null,
+        isUserRecipe: true,
+        _id: recipe._id
+      }
+    }));
+
+    // Merge both sources - put user recipes first
+    const allHits = [...userRecipeHits, ...edamamHits];
+
+    // Return in Edamam format
+    res.json({ hits: allHits });
+  } catch (error) {
+    console.error("Error in /recipes route:", error);
     return res
       .status(500)
-      .json({ error: "Failed to fetch recipes from Edamam." });
+      .json({ error: "Failed to fetch recipes." });
   }
 });
 
