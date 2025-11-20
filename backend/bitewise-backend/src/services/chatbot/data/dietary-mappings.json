@@ -12,7 +12,8 @@
     "low-sodium": "low-sodium",
     "high-protein": "high-protein",
     "low-fat": "low-fat",
-    "shellfish-free": "shellfish-free"
+    "shellfish-free": "shellfish-free",
+    "crustacean-free": "crustacean-free"
   },
   "mealTypes": {
     "breakfast": ["breakfast", "morning", "brunch"],
