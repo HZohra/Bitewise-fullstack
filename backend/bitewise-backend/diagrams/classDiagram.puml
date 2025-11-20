@@ -1,0 +1,64 @@
+@startuml
+
+class Server {
+  +start()
+  +configureMiddleware()
+  +registerRoutes()
+}
+
+class Database {
+  +connect()
+  +disconnect()
+}
+
+class UserController {
+  +registerUser()
+  +loginUser()
+  +getUserProfile()
+}
+
+class UserService {
+  +createUser()
+  +authenticateUser()
+  +getUser()
+}
+
+class UserModel {
+  -id
+  -email
+  -password
+  -name
+  +save()
+}
+
+class RecipeController {
+  +createRecipe()
+  +getRecipes()
+  +deleteRecipe()
+}
+
+class RecipeService {
+  +addRecipe()
+  +fetchRecipes()
+  +removeRecipe()
+}
+
+class RecipeModel {
+  -id
+  -title
+  -ingredients
+  -instructions
+  +save()
+}
+
+Server --> Database
+Server --> UserController
+Server --> RecipeController
+
+UserController --> UserService
+UserService --> UserModel
+
+RecipeController --> RecipeService
+RecipeService --> RecipeModel
+
+@enduml
