@@ -14,7 +14,8 @@
     "low-fat": "low-fat",
     "shellfish-free": "shellfish-free",
     "crustacean-free": "crustacean-free",
-    "fish-free": "fish-free"
+    "fish-free": "fish-free",
+    "mollusk-free": "mollusk-free"
   },
   "mealTypes": {
     "breakfast": ["breakfast", "morning", "brunch"],
