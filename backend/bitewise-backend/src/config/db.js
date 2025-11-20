@@ -5,6 +5,8 @@ dotenv.config();
 
 export async function connectDB() {
   try {
+  // console.log("DEBUG: MONGODB_URI =", process.env.MONGODB_URI);
+
     await mongoose.connect(process.env.MONGODB_URI, {
       serverSelectionTimeoutMS: 5000,
     });
