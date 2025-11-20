@@ -5,7 +5,7 @@ import App from "./App";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
 
-//console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
+//console.log("✅ Backend URL:", import.meta.env.VITE_BACKEND_URL);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>

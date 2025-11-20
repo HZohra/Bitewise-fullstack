@@ -44,7 +44,7 @@ function formatRecipeList(result, entities) {
     const shortIngredients = recipe.ingerdients.slice(0, 5).join(', ');
     response += `   🧂 Ingredients: ${shortIngredients}...\n\n`;
   });
-  //   response += `   [View Recipe](${recipe.url})\n\n`;
+  //   response += `   🔗 [View Recipe](${recipe.url})\n\n`;
   // });
   
   // if (result.totalFound > result.recipes.length) {
