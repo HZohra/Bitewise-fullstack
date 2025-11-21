@@ -12,60 +12,50 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-teal-500 text-white flex justify-around items-center py-3 shadow-md">
-      {/* Brand */}
-      <Link to="/" className="text-lg font-bold">
-        BiteWise
-      </Link>
+    <nav className="bg-teal-500 text-white flex justify-between items-center px-8 py-3 shadow-md">
+      {/* LEFT SECTION: Brand + Links */}
+      <div className="flex items-center gap-8">
+        {/* Brand */}
+        <Link to="/" className="text-xl font-bold tracking-wide">
+          BiteWise
+        </Link>
 
-      {/* Links */}
-      <div className="flex gap-6 items-center">
-        <Link to="/" className="hover:text-orange-300">
-          Home
-        </Link>
-        <Link to="/recipes" className="hover:text-orange-300">
-          Recipes
-        </Link>
-        <Link to="/restaurants" className="hover:text-orange-300">
-          Restaurants
-        </Link>
-        <Link to="/add" className="hover:text-orange-300">
-          Add Recipe
-        </Link>
-        {/* <Link to="/chatbot" className="hover:text-orange-300">
-          Chatbot
-        </Link> */}
+        {/* Links */}
+        <div className="flex gap-6 items-center text-sm font-medium">
+          <Link to="/" className="hover:text-orange-300">
+            Home
+          </Link>
+          <Link to="/recipes" className="hover:text-orange-300">
+            Recipes
+          </Link>
+          <Link to="/restaurants" className="hover:text-orange-300">
+            Restaurants
+          </Link>
 
-        {/* Auth-aware section */}
+          {user && (
+            <Link to="/account" className="hover:text-orange-300">
+              Account
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {/* RIGHT SECTION: Auth buttons */}
+      <div className="flex items-center gap-4">
         {user ? (
-          <>
-            <Link to="/my-recipes" className="hover:text-orange-300">
-              My Recipes
-            </Link>
-
-            <button
-              onClick={handleLogout}
-              className="ml-2 px-3 py-1 rounded-md bg-red-500 hover:bg-red-600 text-white text-sm"
-            >
-              Logout
-            </button>
-
-            <span className="text-sm text-orange-200 ml-1">
-              Hi, {user.name?.split(" ")[0] || "there"}!
-            </span>
-          </>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-1.5 rounded-md bg-emerald-400 hover:bg-emerald-500 text-white text-sm font-semibold shadow-sm transition"
+          >
+            Logout
+          </button>
         ) : (
-          <>
-            {/* ONLY show Login */}
-            <Link
-              to="/login"
-              className="ml-4 px-3 py-1 rounded-md bg-white text-teal-600 text-sm font-medium hover:bg-orange-300 hover:text-teal-900"
-            >
-              Login
-            </Link>
-
-            {/* Register link removed completely */}
-          </>
+          <Link
+            to="/login"
+            className="px-4 py-1.5 rounded-md bg-white text-teal-600 text-sm font-semibold hover:bg-orange-300 hover:text-teal-900 transition"
+          >
+            Login
+          </Link>
         )}
       </div>
     </nav>
