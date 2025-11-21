@@ -1,9 +1,9 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
 const OVERPASS_URL = process.env.OVERPASS_URL || "https://overpass-api.de/api/interpreter";
 const DEFAULT_RADIUS = process.env.DEFAULT_RADIUS || 1000;
 
-async function findRestaurants(lat, lon, radius = DEFAULT_RADIUS) {
+export async function findRestaurants(lat, lon, radius = DEFAULT_RADIUS) {
   const query = `
   [out:json];
   (
@@ -42,5 +42,3 @@ async function findRestaurants(lat, lon, radius = DEFAULT_RADIUS) {
 
   return restaurants;
 }
-
-module.exports = { findRestaurants };
