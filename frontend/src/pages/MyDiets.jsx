@@ -1,17 +1,16 @@
-// src/pages/MyAllergies.jsx
+// src/pages/MyDiets.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export default function MyAllergies() {
+export default function MyDiets() {
   const { user, setUser } = useAuth();
 
-  const [allergies, setAllergies] = useState([]);
+  const [diets, setDiets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
-  // === Load latest user data from backend (MongoDB) ===
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -36,12 +35,11 @@ export default function MyAllergies() {
         const data = await res.json();
         if (setUser) setUser(data);
 
-        const serverAllergies =
-          Array.isArray(data.allergens) && data.allergens.length > 0
-            ? data.allergens
+        const serverDiets =
+          Array.isArray(data.diets) && data.diets.length > 0
+            ? data.diets
             : [];
-
-        setAllergies(serverAllergies);
+        setDiets(serverDiets);
       } catch (err) {
         console.error("Error loading profile", err);
       } finally {
@@ -52,23 +50,22 @@ export default function MyAllergies() {
     fetchProfile();
   }, [setUser]);
 
-  // helpers
-  const cleanAllergies = allergies
-    .map((a) => String(a).trim())
-    .filter((a) => a.length > 0);
+  const cleanDiets = diets
+    .map((d) => String(d).trim())
+    .filter((d) => d.length > 0);
 
   const handleAddField = () => {
-    setAllergies((prev) => [...prev, ""]);
+    setDiets((prev) => [...prev, ""]);
   };
 
   const handleChangeField = (index, value) => {
-    setAllergies((prev) =>
+    setDiets((prev) =>
       prev.map((item, i) => (i === index ? value : item))
     );
   };
 
   const handleRemoveField = (index) => {
-    setAllergies((prev) => prev.filter((_, i) => i !== index));
+    setDiets((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -92,28 +89,26 @@ export default function MyAllergies() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ allergens: cleanAllergies }),
+          body: JSON.stringify({ diets: cleanDiets }),
         }
       );
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        console.error("Save allergies failed:", data);
-        setMessage(data.error || "Failed to save allergies.");
+        console.error("Save diets failed:", data);
+        setMessage(data.error || "Failed to save diets.");
         setSaving(false);
         return;
       }
 
       const updatedUser = await res.json();
       if (setUser) setUser(updatedUser);
-      setAllergies(
-        Array.isArray(updatedUser.allergens)
-          ? updatedUser.allergens
-          : []
+      setDiets(
+        Array.isArray(updatedUser.diets) ? updatedUser.diets : []
       );
-      setMessage("Allergies saved!");
+      setMessage("Diets saved!");
     } catch (err) {
-      console.error("Error saving allergies", err);
+      console.error("Error saving diets", err);
       setMessage("Something went wrong.");
     } finally {
       setSaving(false);
@@ -124,10 +119,8 @@ export default function MyAllergies() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Page title */}
-      <h1 className="text-3xl font-bold mb-6">My Allergies</h1>
+      <h1 className="text-3xl font-bold mb-6">My Diets</h1>
 
-      {/* Header card */}
       <div className="bg-white rounded-2xl shadow mb-6 px-8 py-6 flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-2xl font-semibold">
@@ -143,7 +136,6 @@ export default function MyAllergies() {
           </div>
         </div>
 
-        {/* Pills row */}
         <div className="flex flex-wrap gap-3">
           <Link
             to="/account/settings"
@@ -152,41 +144,41 @@ export default function MyAllergies() {
             Personal info
           </Link>
 
+          <Link
+            to="/account/allergies"
+            className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
+          >
+            Allergies
+          </Link>
+
           <button
             type="button"
             className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-900 text-white border-gray-900"
           >
-            Allergies
-          </button>
-
-          <Link
-            to="/account/diets"
-            className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-          >
             Diets
-          </Link>
+          </button>
         </div>
       </div>
 
-      {/* CURRENT ALLERGIES */}
+      {/* CURRENT DIETS */}
       <section className="bg-white rounded-2xl shadow mb-6 p-6">
         <h2 className="text-lg font-semibold mb-2">
-          Your Current Allergies
+          Your Current Diets
         </h2>
         {loading ? (
           <p className="text-sm text-gray-500">Loading…</p>
-        ) : cleanAllergies.length === 0 ? (
+        ) : cleanDiets.length === 0 ? (
           <p className="text-sm text-gray-500">
-            You have no allergies saved.
+            You haven't added any diet preferences yet.
           </p>
         ) : (
           <ul className="flex flex-wrap gap-2 mt-2">
-            {cleanAllergies.map((a) => (
+            {cleanDiets.map((d) => (
               <li
-                key={a}
+                key={d}
                 className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-sm font-medium border border-emerald-100"
               >
-                {a}
+                {d}
               </li>
             ))}
           </ul>
@@ -200,25 +192,26 @@ export default function MyAllergies() {
       >
         <div>
           <span className="block text-sm font-medium mb-1">
-            Edit Allergies
+            Edit Diets
           </span>
           <p className="text-xs text-gray-500 mb-3">
-            Add or remove allergies below.
+            Add or remove diet preferences below (e.g. vegetarian,
+            vegan, halal, gluten-free).
           </p>
 
           <div className="space-y-3">
-            {allergies.map((value, index) => (
+            {diets.map((value, index) => (
               <div key={index} className="flex gap-2 items-center">
                 <input
                   type="text"
                   className="flex-1 border rounded-lg px-3 py-2 text-sm"
-                  placeholder="e.g. peanuts"
+                  placeholder="e.g. vegetarian, vegan, halal"
                   value={value}
                   onChange={(e) =>
                     handleChangeField(index, e.target.value)
                   }
                 />
-                {allergies.length > 1 && (
+                {diets.length > 1 && (
                   <button
                     type="button"
                     onClick={() => handleRemoveField(index)}
@@ -245,7 +238,7 @@ export default function MyAllergies() {
           disabled={saving}
           className="px-4 py-2 rounded-lg bg-emerald-500 text-white font-semibold disabled:opacity-60"
         >
-          {saving ? "Saving..." : "Save Allergies"}
+          {saving ? "Saving..." : "Save Diets"}
         </button>
 
         {message && (
