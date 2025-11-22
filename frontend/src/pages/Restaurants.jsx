@@ -34,17 +34,17 @@ export default function Restaurants() {
     }
 
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setGeoLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      (err) => {
-        console.error("Geolocation error:", err);
-        setError("Unable to get your location.");
-      }
-    );
+     (pos) => {
+        setGeoLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      },
+      (err) => {
+        console.error("Geolocation error:", err.code, err.message);
+        setError(`Unable to get your location: ${err.message}`);
+      }
+    );
   };
 
   // Search using Overpass via backend
