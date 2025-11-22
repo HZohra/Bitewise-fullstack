@@ -1,8 +1,9 @@
 // src/pages/Restaurants.jsx
 import { useState } from "react";
 
+// API base URL — uses your .env file or defaults to port 5002
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
+  import.meta.env.VITE_API_URL || "http://localhost:5002";
 
 // Known area → coordinates
 const AREA_COORDS = {
@@ -17,42 +18,42 @@ export default function Restaurants() {
   const [error, setError] = useState("");
 
   const [useGeolocation, setUseGeolocation] = useState(false);
-  const [geoLocation, setGeoLocation] = useState(null); // { lat, lng }
+  const [geoLocation, setGeoLocation] = useState(null);
 
-  const [selectedArea, setSelectedArea] = useState(""); // "waterloo", etc.
-  const [radiusKm, setRadiusKm] = useState(2); // default 2km
+  const [selectedArea, setSelectedArea] = useState("");
+  const [radiusKm, setRadiusKm] = useState(2);
 
-  // Get browser location
+  // Get user location
   const handleUseCurrentLocation = () => {
     setError("");
     setUseGeolocation(true);
     setSelectedArea("");
 
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser.");
+      setError("Your browser does not support geolocation.");
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
-     (pos) => {
-        setGeoLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      (err) => {
-        console.error("Geolocation error:", err.code, err.message);
-        setError(`Unable to get your location: ${err.message}`);
-      }
-    );
+      (pos) => {
+        setGeoLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      },
+      (err) => {
+        console.error("Geolocation error:", err.code, err.message);
+        setError(`Unable to get your location: ${err.message}`);
+      }
+    );
   };
 
-  // Search using Overpass via backend
+  // Search backend for restaurants
   const handleSearch = async () => {
     setError("");
     setLoading(true);
 
-    // Decide which coordinates to use
+    // Determine which coords to use
     let center = null;
 
     if (useGeolocation && geoLocation) {
@@ -102,7 +103,8 @@ export default function Restaurants() {
       {/* LOCATION CONTROLS */}
       <div className="bg-white rounded-2xl shadow p-4 space-y-4">
         <div className="flex flex-wrap gap-4 items-end">
-          {/* Use my current location */}
+          
+          {/* Use current location */}
           <div className="flex flex-col">
             <label className="text-sm font-medium mb-1">
               Use my current location
@@ -118,6 +120,7 @@ export default function Restaurants() {
             >
               Use current location
             </button>
+
             {geoLocation && (
               <span className="mt-1 text-xs text-gray-500">
                 ({geoLocation.lat.toFixed(4)}, {geoLocation.lng.toFixed(4)})
@@ -125,11 +128,9 @@ export default function Restaurants() {
             )}
           </div>
 
-          {/* OR choose an area */}
+          {/* Area picker */}
           <div className="flex flex-col">
-            <label className="text-sm font-medium mb-1">
-              Or choose an area
-            </label>
+            <label className="text-sm font-medium mb-1">Or choose an area</label>
             <select
               className="border rounded-lg px-3 py-2 text-sm"
               value={selectedArea}
@@ -143,6 +144,7 @@ export default function Restaurants() {
               <option value="kitchener">Kitchener</option>
               <option value="cambridge">Cambridge</option>
             </select>
+
             {selectedArea && (
               <span className="mt-1 text-xs text-gray-500">
                 Center: {AREA_COORDS[selectedArea].lat},{" "}
@@ -166,9 +168,7 @@ export default function Restaurants() {
 
           {/* Search button */}
           <div className="flex flex-col">
-            <span className="text-sm font-medium mb-1 invisible">
-              Button
-            </span>
+            <span className="text-sm font-medium mb-1 invisible">.</span>
             <button
               onClick={handleSearch}
               className="px-5 py-2 rounded-lg bg-emerald-500 text-white font-semibold hover:bg-emerald-600"
@@ -178,11 +178,7 @@ export default function Restaurants() {
           </div>
         </div>
 
-        {error && (
-          <p className="text-sm text-red-500 mt-2">
-            {error}
-          </p>
-        )}
+        {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
       </div>
 
       {/* RESULTS */}
@@ -202,6 +198,7 @@ export default function Restaurants() {
               r.address.houseNumber && r.address.street
                 ? `${r.address.houseNumber} ${r.address.street}`
                 : r.address.street || null;
+
             const line2 = [r.address.city, r.address.postcode]
               .filter(Boolean)
               .join(" ");
