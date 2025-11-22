@@ -1,25 +1,25 @@
 // src/App.jsx
 import { Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
-
+import ChatbotWidget from "./components/ChatbotWidget.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Chatbot from "./pages/Chatbot.jsx";
+//public pages
 import Home from "./pages/Home";
 import Recipes from "./pages/Recipes";
 import Restaurants from "./pages/Restaurants";
+
 import AddRecipe from "./pages/AddRecipe";
-import Chatbot from "./pages/Chatbot";
 import RecipeDetails from "./pages/RecipeDetails";
 import MyRecipes from "./pages/MyRecipes";
-import Favorites from "./pages/Favorites"; 
 
-
+//Auth Routes
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import ChatbotWidget from "./components/ChatbotWidget.jsx";
-
+//Account pages
 import AccountLayout from "./pages/AccountLayout.jsx";
 import AccountSettings from "./pages/AccountSettings.jsx";
 import MyAllergies from "./pages/MyAllergies.jsx";
@@ -47,7 +47,6 @@ function App() {
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
-          <Route path="/favorites" element={<Favorites />} /> 
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/reset-password/:token"
