@@ -19,15 +19,16 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ChatbotWidget from "./components/ChatbotWidget.jsx";
 
 import AccountLayout from "./pages/AccountLayout.jsx";
-import MyAllergies from "./pages/MyAllergies.jsx";
 import AccountSettings from "./pages/AccountSettings.jsx";
-
+import MyAllergies from "./pages/MyAllergies.jsx";
+import MyDiets from "./pages/MyDiets.jsx";   // 🌱 new
 
 function App() {
   const location = useLocation();
 
   const authRoutes = ["/login", "/register", "/forgot-password"];
-  const isResetPasswordRoute = location.pathname.startsWith("/reset-password");
+  const isResetPasswordRoute =
+    location.pathname.startsWith("/reset-password");
 
   const hideNav =
     authRoutes.includes(location.pathname) || isResetPasswordRoute;
@@ -45,34 +46,37 @@ function App() {
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
+          />
 
           {/* Auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Account: Home + Allergies */}
-<Route
-  path="/account"
-  element={
-    <ProtectedRoute>
-      <AccountLayout />
-    </ProtectedRoute>
-  }
->
-  {/* /account → “Home” page (AccountSettings) */}
-  <Route index element={<AccountSettings />} />
+          {/* Account: nested layout */}
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <AccountLayout />
+              </ProtectedRoute>
+            }
+          >
+            {/* /account → home */}
+            <Route index element={<AccountSettings />} />
+            <Route path="settings" element={<AccountSettings />} />
 
-  {/* also allow /account/settings to show the same page if you want */}
-  <Route path="settings" element={<AccountSettings />} />
+            {/* /account/allergies → allergies page */}
+            <Route path="allergies" element={<MyAllergies />} />
 
-  {/* /account/allergies → Allergies page inside account */}
-  <Route path="allergies" element={<MyAllergies />} />
-</Route>
+            {/* /account/diets → diets page */}
+            <Route path="diets" element={<MyDiets />} />
+          </Route>
 
-
-  {/* Standalone protected pages */}
-    <Route
+          {/* Standalone protected pages */}
+          <Route
             path="/add"
             element={
               <ProtectedRoute>

@@ -200,6 +200,79 @@ router.get("/me", requireAuth, async (req, res) => {
 });
 
 /**
+ * PATCH /auth/me  (protected)
+ * Update basic profile fields: name, email, phone, birthDate
+ */
+router.patch("/me", requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { name, email, phone, birthDate } = req.body;
+
+    const update = {};
+
+    if (typeof name === "string" && name.trim().length > 0) {
+      update.name = name.trim();
+    }
+
+    if (typeof email === "string" && email.trim().length > 0) {
+      const normalizedEmail = email.toLowerCase().trim();
+      const existing = await findUserByEmail(normalizedEmail);
+
+      // If some *other* user already has this email, block it
+      if (existing && existing.id.toString() !== userId.toString()) {
+        return res
+          .status(409)
+          .json({ error: "Another account is already using that email." });
+      }
+
+      update.email = normalizedEmail;
+    }
+
+    if (phone !== undefined) {
+      update.phone =
+        typeof phone === "string" && phone.trim().length > 0
+          ? phone.trim()
+          : null;
+    }
+
+    if (birthDate !== undefined) {
+      if (!birthDate) {
+        update.birthDate = null;
+      } else {
+        const d = new Date(birthDate);
+        update.birthDate = isNaN(d.getTime()) ? null : d;
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: update },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    return res.json({
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      birthDate: updatedUser.birthDate,
+      phone: updatedUser.phone,
+      diets: updatedUser.diets,
+      allergens: updatedUser.allergens,
+      maxCookTime: updatedUser.maxCookTime,
+      createdAt: updatedUser.createdAt,
+    });
+  } catch (error) {
+    console.error("Error in PATCH /auth/me:", error);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+
+/**
  * PATCH /auth/me/preferences  (protected)
  * Body: { diets?, allergens?, maxCookTime? }
  */

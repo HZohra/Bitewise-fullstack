@@ -7,7 +7,6 @@ export default function AccountLayout() {
   const { user, setUser } = useAuth();
   const location = useLocation();
 
-
   // highlight active tab
   const current = location.pathname;
 
@@ -30,7 +29,7 @@ export default function AccountLayout() {
                 : "hover:bg-gray-100"
             }`}
           >
-            Home
+            Personal Info
           </Link>
 
           {/* ALLERGIES */}
@@ -42,14 +41,27 @@ export default function AccountLayout() {
                 : "hover:bg-gray-100"
             }`}
           >
-            My Allergies & Diet
+            My Allergies
+          </Link>
+
+          {/* DIETS */}
+          <Link
+            to="/account/diets"
+            className={`px-4 py-2 rounded-lg font-medium ${
+              current.includes("/account/diets")
+                ? "bg-green-100 text-green-800"
+                : "hover:bg-gray-100"
+            }`}
+          >
+            My Diets
           </Link>
         </nav>
       </aside>
 
       {/* RIGHT CONTENT */}
       <main className="flex-1">
-        <Outlet context={{ user }} />
+        {/* Pass both user & setUser to children like MyAllergies / MyDiets */}
+        <Outlet context={{ user, setUser }} />
       </main>
     </div>
   );
