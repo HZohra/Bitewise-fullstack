@@ -9,6 +9,8 @@ import AddRecipe from "./pages/AddRecipe";
 import Chatbot from "./pages/Chatbot";
 import RecipeDetails from "./pages/RecipeDetails";
 import MyRecipes from "./pages/MyRecipes";
+import Favorites from "./pages/Favorites"; 
+
 
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -44,6 +46,7 @@ function App() {
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
+          <Route path="/favorites" element={<Favorites />} /> 
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
 
