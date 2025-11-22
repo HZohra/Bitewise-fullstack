@@ -3,12 +3,34 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function RecipeDetails() {
   const { state: recipe } = useLocation();
   const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(false); 
+
+  // check if in favs
+  useEffect(() => {
+    const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    setIsFavorite(savedFavorites.some((fav) => fav.id === recipe?.id));
+  }, [recipe]);
 
   if (!recipe) {
     return (
       <p className="text-center text-gray-500 mt-20">No recipe data found.</p>
     );
   }
+
+  //add or remove from favs
+  const toggleFavorite = () => {
+    const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    let updatedFavorites;
+
+    if (isFavorite) {
+      updatedFavorites = savedFavorites.filter((fav) => fav.id !== recipe.id);
+    } else {
+      updatedFavorites = [...savedFavorites, recipe];
+    }
+
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    setIsFavorite(!isFavorite);
+  };
 
   return (
     <div className="min-h-screen bg-green-50 p-6">
@@ -19,7 +41,19 @@ export default function RecipeDetails() {
         ← Back
       </button>
 
-      <h1 className="text-2xl font-bold text-teal-700 mb-4">{recipe.name}</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold text-teal-700">{recipe.name}</h1>
+        <button
+          onClick={toggleFavorite}
+          className={`text-2xl transition ${
+            isFavorite ? "text-red-500" : "text-gray-400 hover:text-red-400"
+          }`}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+        >
+          {isFavorite ? "❤️" : "🤍"}
+        </button>
+      </div>
+
       <img
         src={recipe.image}
         alt={recipe.name}
