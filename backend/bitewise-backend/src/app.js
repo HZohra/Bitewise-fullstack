@@ -35,7 +35,7 @@ app.use((req, res) => {
 });
 
 // 🔥 FIX: Define PORT BEFORE using it
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 
 // Start server AFTER MongoDB connects
 connectDB()

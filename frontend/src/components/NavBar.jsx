@@ -15,122 +15,190 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="relative bg-teal-500 text-white flex justify-between items-center px-8 py-3 shadow-md">
-      {/* LEFT: Brand + main links */}
-      <div className="flex items-center gap-8">
+    <nav className="relative bg-teal-500 text-white flex justify-between items-center px-6 py-3 shadow-md">
+      {/* LEFT: Hamburger + Brand */}
+      <div className="flex items-center gap-4">
+        {/* Hamburger */}
+        <button
+          onClick={() => setMenuOpen((prev) => !prev)}
+          className="p-2 rounded-full hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-teal-500 focus:ring-white"
+        >
+          <span className="sr-only">Open menu</span>
+          <div className="space-y-1">
+            <span className="block w-6 h-0.5 bg-white rounded" />
+            <span className="block w-6 h-0.5 bg-white rounded" />
+            <span className="block w-6 h-0.5 bg-white rounded" />
+          </div>
+        </button>
+
         {/* Brand */}
         <Link to="/" className="text-xl font-bold tracking-wide">
           BiteWise
         </Link>
-
-        {/* Main links */}
-        <div className="flex gap-6 items-center text-sm font-medium">
-          <Link to="/" className="hover:text-orange-300">
-            Home
-          </Link>
-          <Link to="/recipes" className="hover:text-orange-300">
-            Recipes
-          </Link>
-          <Link to="/restaurants" className="hover:text-orange-300">
-            Restaurants
-          </Link>
-        </div>
       </div>
 
-      {/* RIGHT: Auth / hamburger */}
-      <div className="flex items-center gap-4">
-        {user ? (
-          <>
-            {/* Hamburger icon for account menu */}
-            <button
-              onClick={() => setMenuOpen((prev) => !prev)}
-              className="p-2 rounded-full hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-teal-500 focus:ring-white"
-            >
-              <span className="sr-only">Open account menu</span>
-              <div className="space-y-1">
-                <span className="block w-5 h-0.5 bg-white rounded"></span>
-                <span className="block w-5 h-0.5 bg-white rounded"></span>
-                <span className="block w-5 h-0.5 bg-white rounded"></span>
+      {/* CENTER: Nav Links */}
+      <div className="flex items-center gap-6 text-sm font-medium">
+        <Link to="/" className="hover:text-orange-300">
+          Home
+        </Link>
+        <Link to="/recipes" className="hover:text-orange-300">
+          Recipes
+        </Link>
+        <Link to="/restaurants" className="hover:text-orange-300">
+          Restaurants
+        </Link>
+      </div>
+
+      {/* RIGHT spacer (for future icons / cart) */}
+      <div className="w-10" />
+
+      {/* ======== SIDE DRAWER + OVERLAY ========= */}
+      {menuOpen && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black/40 z-40"
+            onClick={() => setMenuOpen(false)}
+          />
+
+          {/* Drawer */}
+          <div className="fixed inset-y-0 left-0 w-80 bg-white text-gray-900 z-50 shadow-2xl flex flex-col">
+            {/* Header / profile section */}
+            <div className="px-5 pt-5 pb-4 border-b flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-semibold text-lg">
+                {user ? (user.name || "B")[0].toUpperCase() : "B"}
               </div>
-            </button>
 
-            {/* Dropdown / slide menu */}
-            {menuOpen && (
-              <div className="absolute top-14 right-6 bg-white text-gray-800 rounded-xl shadow-lg w-64 py-3 z-50">
-                {/* Signed in info */}
-                <div className="px-4 pb-3 border-b">
-                  <p className="text-xs font-semibold text-gray-500 uppercase">
-                    Signed in as
-                  </p>
-                  <p className="text-sm font-medium">
-                    {user.name || "BiteWise user"}
-                  </p>
-                  {user.email && (
-                    <p className="text-xs text-gray-400">{user.email}</p>
-                  )}
-                </div>
+              <div className="flex flex-col">
+                {user ? (
+                  <>
+                    <span className="text-base font-semibold">
+                      {user.name}
+                    </span>
+                    {user.email && (
+                      <span className="text-xs text-gray-500">
+                        {user.email}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        navigate("/account");
+                      }}
+                      className="mt-1 text-sm font-semibold text-emerald-600 hover:underline text-left"
+                    >
+                      Manage account
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-base font-semibold">
+                      Welcome to BiteWise
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      Sign in to manage your recipes
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
 
-                {/* Account section */}
-                <div className="mt-2">
-                  <p className="px-4 mb-1 text-xs font-semibold text-gray-500 uppercase">
-                    Account
-                  </p>
-
-                  <Link
-                    to="/account"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+            {/* MAIN MENU ITEMS */}
+            <div className="flex-1 overflow-y-auto py-3">
+              {user ? (
+                <>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/add");
+                    }}
+                    className="w-full flex items-center gap-3 px-5 py-3 text-base font-medium hover:bg-gray-100"
                   >
-                    Overview
-                  </Link>
+                    <span className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-lg">
+                      +
+                    </span>
+                    <span>Add Recipe</span>
+                  </button>
 
-                  <Link
-                    to="/account/allergies"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/my-recipes");
+                    }}
+                    className="w-full flex items-center gap-3 px-5 py-3 text-base font-medium hover:bg-gray-100"
                   >
-                    My Allergies & Diet
-                  </Link>
+                    <span className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-lg">
+                      🍽
+                    </span>
+                    <span>My Recipes</span>
+                  </button>
 
-                  <Link
-                    to="/account/my-recipes"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/favorites");
+                    }}
+                    className="w-full flex items-center gap-3 px-5 py-3 text-base font-medium hover:bg-gray-100"
                   >
-                    My Recipes
-                  </Link>
-
-                  <Link
-                    to="/account/add-recipe"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                    <span className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-lg">
+                      ❤️
+                    </span>
+                    <span>My Favorites</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/login");
+                    }}
+                    className="w-11/12 mx-auto mt-3 mb-2 px-4 py-3 rounded-lg bg-emerald-500 text-white text-base font-semibold hover:bg-emerald-600 transition"
                   >
-                    Add Recipe
-                  </Link>
-                </div>
+                    Sign in
+                  </button>
 
-                {/* Divider */}
-                <div className="my-2 border-t" />
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/register");
+                    }}
+                    className="w-11/12 mx-auto px-4 py-3 rounded-lg border border-emerald-500 text-emerald-600 text-base font-semibold hover:bg-emerald-50 transition"
+                  >
+                    Register
+                  </button>
+                </>
+              )}
+            </div>
 
-                {/* Logout */}
+            {/* FOOTER: Sign out row — Uber-style */}
+            <div className="border-t px-1 py-2">
+              {user ? (
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50"
+                  className="w-full text-left px-5 py-3 text-base font-semibold text-red-600 hover:bg-red-50"
                 >
-                  Logout
+                  Sign out
                 </button>
-              </div>
-            )}
-          </>
-        ) : (
-          <Link
-            to="/login"
-            className="px-4 py-1.5 rounded-full bg-white text-teal-600 text-sm font-semibold hover:bg-orange-300 hover:text-teal-900 transition"
-          >
-            Log in
-          </Link>
-        )}
-      </div>
+              ) : (
+                <p className="text-xs text-gray-500 px-4 pb-1">
+                  Already have an account?{" "}
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/login");
+                    }}
+                    className="text-emerald-600 font-semibold hover:underline"
+                  >
+                    Sign in
+                  </button>
+                </p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </nav>
   );
 }

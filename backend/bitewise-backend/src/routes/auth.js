@@ -206,13 +206,58 @@ router.get("/me", requireAuth, async (req, res) => {
 router.patch("/me/preferences", requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { diets, allergens, maxCookTime } = req.body;
+    let { diets, allergens, maxCookTime } = req.body;
 
-    const updatedUser = await updateUserPreferences(userId, {
-      diets,
-      allergens,
-      maxCookTime,
-    });
+    const update = {};
+
+    // diets: optional, must be array of trimmed strings if provided
+    if (Array.isArray(diets)) {
+      update.diets = diets
+        .map((d) => String(d).trim())
+        .filter((d) => d.length > 0);
+    }
+
+    // allergens: optional, must be array of trimmed strings if provided
+    if (Array.isArray(allergens)) {
+      update.allergens = allergens
+        .map((a) => String(a).trim())
+        .filter((a) => a.length > 0);
+    }
+
+    // maxCookTime: optional, can be null or number
+    if (maxCookTime !== undefined) {
+      if (maxCookTime === null || maxCookTime === "") {
+        update.maxCookTime = null;
+      } else {
+        const n = Number(maxCookTime);
+        update.maxCookTime = Number.isNaN(n) ? null : n;
+      }
+    }
+
+    // If nothing to update, just return current user
+    if (Object.keys(update).length === 0) {
+      const currentUser = await findUserById(userId);
+      if (!currentUser) {
+        return res.status(404).json({ error: "User not found." });
+      }
+      return res.json({
+        id: currentUser.id,
+        name: currentUser.name,
+        email: currentUser.email,
+        birthDate: currentUser.birthDate,
+        phone: currentUser.phone,
+        diets: currentUser.diets,
+        allergens: currentUser.allergens,
+        maxCookTime: currentUser.maxCookTime,
+      });
+    }
+
+    // Apply updates
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: update },
+      { new: true }
+    );
 
     if (!updatedUser) {
       return res.status(404).json({ error: "User not found." });
@@ -233,6 +278,7 @@ router.patch("/me/preferences", requireAuth, async (req, res) => {
     return res.status(500).json({ error: "Internal server error." });
   }
 });
+
 
 /**
  * POST /auth/change-password  (protected)

@@ -19,14 +19,13 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ChatbotWidget from "./components/ChatbotWidget.jsx";
 
 import AccountLayout from "./pages/AccountLayout.jsx";
-import AccountOverview from "./pages/AccountOverview.jsx";
 import MyAllergies from "./pages/MyAllergies.jsx";
 import AccountSettings from "./pages/AccountSettings.jsx";
+
 
 function App() {
   const location = useLocation();
 
-  // Routes where navbar + chatbot should be hidden
   const authRoutes = ["/login", "/register", "/forgot-password"];
   const isResetPasswordRoute = location.pathname.startsWith("/reset-password");
 
@@ -35,13 +34,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-green-50 text-gray-900">
-      {/* Show NavBar ONLY if not on auth pages */}
       {!hideNav && <NavBar />}
 
-      {/* Page content */}
       <div className={hideNav ? "" : "p-6"}>
         <Routes>
-          {/* Public Routes */}
+          {/* Public */}
           <Route path="/" element={<Home />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/restaurants" element={<Restaurants />} />
@@ -50,39 +47,50 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-          {/* Auth Routes */}
+          {/* Auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          
-          {/* ACCOUNT SECTION (Protected + nested) */}
-          <Route
-            path="/account"
+          {/* Account: Home + Allergies */}
+<Route
+  path="/account"
+  element={
+    <ProtectedRoute>
+      <AccountLayout />
+    </ProtectedRoute>
+  }
+>
+  {/* /account → “Home” page (AccountSettings) */}
+  <Route index element={<AccountSettings />} />
+
+  {/* also allow /account/settings to show the same page if you want */}
+  <Route path="settings" element={<AccountSettings />} />
+
+  {/* /account/allergies → Allergies page inside account */}
+  <Route path="allergies" element={<MyAllergies />} />
+</Route>
+
+
+  {/* Standalone protected pages */}
+    <Route
+            path="/add"
             element={
               <ProtectedRoute>
-                <AccountLayout />
+                <AddRecipe />
               </ProtectedRoute>
             }
-          >
-            {/* /account */}
-            <Route index element={<AccountOverview />} />
-
-            {/* /account/add-recipe */}
-            <Route path="add-recipe" element={<AddRecipe />} />
-
-            {/* /account/my-recipes */}
-            <Route path="my-recipes" element={<MyRecipes />} />
-
-            {/* /account/allergies */}
-            <Route path="allergies" element={<MyAllergies />} />
-
-            {/* /account/settings */}
-            <Route path="settings" element={<AccountSettings />} />
-          </Route>
+          />
+          <Route
+            path="/my-recipes"
+            element={
+              <ProtectedRoute>
+                <MyRecipes />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
 
-      {/* Show Chatbot widget ONLY if not on auth pages */}
       {!hideNav && <ChatbotWidget />}
     </div>
   );

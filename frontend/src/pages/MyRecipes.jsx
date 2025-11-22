@@ -1,97 +1,200 @@
-// page for user that stores recipe
+// src/pages/MyAllergies.jsx
+import { useEffect, useState } from "react";
+import { useOutletContext, Link } from "react-router-dom";
 
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+export default function MyAllergies() {
+  const { user, setUser } = useOutletContext();
+  const [allergies, setAllergies] = useState([""]);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
 
-export default function MyRecipes() {
-  const navigate = useNavigate();
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
+  // Pre-fill from user
   useEffect(() => {
-    const fetchMyRecipes = async () => {
-      try {
-        const token = localStorage.getItem('authToken');
-        
-        if (!token) {
-          setError('You must be logged in to view your recipes');
-          setLoading(false);
-          return;
-        }
+    if (!user) return;
+    if (user.allergens && user.allergens.length > 0) {
+      setAllergies(user.allergens);
+    } else {
+      setAllergies([""]);
+    }
+  }, [user]);
 
-        const response = await fetch('http://localhost:5002/my-recipes', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch recipes');
-        }
-
-        const data = await response.json();
-        setRecipes(data);
-      } catch (err) {
-        console.error('Error fetching recipes:', err);
-        setError(err.message || 'Failed to load recipes');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMyRecipes();
-  }, []);
-
-  const handleRecipeClick = (recipe) => {
-    navigate(`/recipe/${recipe._id}`, { state: recipe });
+  const handleAddField = () => {
+    setAllergies((prev) => [...prev, ""]);
   };
 
+  const handleChangeField = (index, value) => {
+    setAllergies((prev) =>
+      prev.map((item, i) => (i === index ? value : item))
+    );
+  };
+
+  const handleRemoveField = (index) => {
+    setAllergies((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setMessage("");
+
+    // Clean out empties/whitespace
+    const cleanAllergies = allergies
+      .map((a) => a.trim())
+      .filter((a) => a.length > 0);
+
+    try {
+      const token = localStorage.getItem("authToken"); // make sure this key matches your login
+      if (!token) {
+        setMessage("You must be logged in.");
+        setSaving(false);
+        return;
+      }
+
+      const res = await fetch(
+        "http://localhost:5002/auth/me/preferences",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ allergens: cleanAllergies }),
+        }
+      );
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setMessage(data.error || "Failed to save allergies.");
+        setSaving(false);
+        return;
+      }
+
+      const updatedUser = await res.json();
+      if (setUser) {
+        setUser(updatedUser);
+      }
+      setMessage("Allergies saved!");
+    } catch (err) {
+      console.error("Error saving allergies", err);
+      setMessage("Something went wrong.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const initial = (user?.name || "B")[0].toUpperCase();
+
+  // For display under the Allergies tab
+  const nonEmptyAllergies = allergies
+    .map((a) => a.trim())
+    .filter((a) => a.length > 0);
+
   return (
-    <div className="min-h-screen bg-green-50 p-6">
-      <h2 className="text-3xl text-center mb-6 text-teal-600 font-bold">
-        My Recipes 🍲
-      </h2>
+    <div className="max-w-4xl mx-auto">
+      {/* Page title */}
+      <h1 className="text-3xl font-bold mb-6">My Allergies</h1>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 max-w-2xl mx-auto">
-          {error}
+      {/* Header card */}
+      <div className="bg-white rounded-2xl shadow mb-6 px-8 py-6 flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-2xl font-semibold">
+            {initial}
+          </div>
+          <div>
+            <p className="text-xl font-semibold">
+              {user?.name || "BiteWise user"}
+            </p>
+            <p className="text-sm text-gray-600">{user?.email || "Not set"}</p>
+          </div>
         </div>
-      )}
 
-      {loading ? (
-        <p className="text-center text-gray-500 mt-20">Loading your recipes...</p>
-      ) : recipes.length === 0 ? (
-        <p className="text-center text-gray-500 mt-20">
-          No saved recipes yet. Go add one!
-        </p>
-      ) : (
-        <div className="grid grid-cols-2 gap-4">
-          {recipes.map((r) => (
-            <div
-              key={r._id}
-              onClick={() => handleRecipeClick(r)}
-              className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer p-3 transition"
-            >
-              {r.image && (
-                <img 
-                  src={r.image} 
-                  alt={r.title} 
-                  className="w-full h-32 object-cover rounded-lg mb-2"
-                />
-              )}
-              <h3 className="font-semibold text-center text-gray-700">
-                {r.title}
-              </h3>
-              {r.description && (
-                <p className="text-sm text-gray-500 text-center mt-1 line-clamp-2">
-                  {r.description}
-                </p>
-              )}
+        {/* Pills row: Personal info + Allergies */}
+        <div className="flex flex-wrap gap-3">
+          <Link
+            to="/account/settings"
+            className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
+          >
+            Personal info
+          </Link>
+
+          <button
+            type="button"
+            className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-900 text-white border-gray-900"
+          >
+            Allergies
+          </button>
+        </div>
+      </div>
+
+      {/* Form card */}
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 bg-white rounded-2xl shadow p-6"
+      >
+        <div>
+          <span className="block text-sm font-medium mb-1">Allergies</span>
+          <p className="text-xs text-gray-500 mb-3">
+            Add each food or ingredient you are allergic to. Click{" "}
+            <span className="font-semibold">Add</span> to create more boxes.
+          </p>
+
+          {/* ✅ Show current list under the Allergies tab */}
+          {nonEmptyAllergies.length > 0 && (
+            <div className="mb-4 text-sm">
+              <p className="text-gray-500 text-xs uppercase">
+                Current allergies
+              </p>
+              <p className="font-medium">
+                {nonEmptyAllergies.join(", ")}
+              </p>
             </div>
-          ))}
+          )}
+
+          {/* Dynamic boxes */}
+          <div className="space-y-3">
+            {allergies.map((value, index) => (
+              <div key={index} className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  className="flex-1 border rounded-lg px-3 py-2 text-sm"
+                  placeholder="e.g. peanuts, pineapple, milk"
+                  value={value}
+                  onChange={(e) =>
+                    handleChangeField(index, e.target.value)
+                  }
+                />
+                {allergies.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveField(index)}
+                    className="text-sm text-red-600 hover:underline"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={handleAddField}
+              className="mt-1 px-4 py-2 rounded-lg bg-emerald-100 text-emerald-700 text-sm font-semibold hover:bg-emerald-200"
+            >
+              Add
+            </button>
+          </div>
         </div>
-      )}
+
+        <button
+          type="submit"
+          disabled={saving}
+          className="px-4 py-2 rounded-lg bg-emerald-500 text-white font-semibold disabled:opacity-60"
+        >
+          {saving ? "Saving..." : "Save Allergies"}
+        </button>
+
+        {message && <p className="text-sm mt-2 text-gray-700">{message}</p>}
+      </form>
     </div>
   );
 }

@@ -1,35 +1,43 @@
 // src/utils/auth.js
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+const SALT_ROUNDS = 10;
+const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
 
-//security key for JWT signing and verification, should be changesd in production
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
-const JWT_EXPIRES_IN = "7d"; // expires in 7days
-
-// Hash a plain-text password
-export async function hashPassword(plainPassword) {
-  // 10 default
-  return bcrypt.hash(plainPassword, 10);
+/**
+ * Hash a plain-text password.
+ */
+export async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(SALT_ROUNDS);
+  const hash = await bcrypt.hash(password, salt);
+  return hash;
 }
 
-// Compare a plain-text password with a stored hash
-export async function comparePassword(plainPassword, hash) {
-  return bcrypt.compare(plainPassword, hash);
+/**
+ * Compare a plain-text password with a stored hash.
+ */
+export async function comparePassword(password, hash) {
+  return bcrypt.compare(password, hash);
 }
 
-// Create a JWT token for a user
+/**
+ * Create a JWT for a user.
+ */
 export function createToken(user) {
-  // Put only safe fields in the token payload
   const payload = {
-    userId: user.id,
-    email: user.email,
+    userId: user.id || user._id?.toString(),
   };
 
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: "7d",
+  });
 }
 
-// Verify a JWT token and return the payload
+/**
+ * Verify a JWT and return the decoded payload.
+ * Throws if the token is invalid/expired.
+ */
 export function verifyToken(token) {
   return jwt.verify(token, JWT_SECRET);
 }
