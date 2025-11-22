@@ -12,7 +12,7 @@ import recipesRouter from "./routes/recipes.js";
 import chatbotRouter from "./routes/chatbot.js";
 import authRouter from "./routes/auth.js";
 import myRecipesRouter from "./routes/my_recipes.js";
-import restaurantRouter from "./routes/resturant.js";
+import restaurantRouter from "./routes/restaurant.js";
 
 console.log("Loaded App ID:", process.env.EDAMAM_APP_ID);
 
