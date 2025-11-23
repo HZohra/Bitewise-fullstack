@@ -16,19 +16,27 @@ export default function AddRecipe() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Dietary filters matching backend dietary-mappings.json (same as Recipes page)
   const filters = [
-    "Gluten-Free", 
-    "Vegan", 
+    "Vegan",
     "Vegetarian", 
-    "Low-Sugar",
+    "Gluten-Free",
     "Dairy-Free",
-    "Egg-Free",
-    "Peanut-Free",
     "Tree-Nut-Free",
-    "Soy-Free",
-    "Paleo",
     "Keto-Friendly",
-    "Low-Sodium"
+    "Paleo",
+    "Low-Carb",
+    "Low-Sugar",
+    "Low-Sodium",
+    "High-Protein",
+    "Low-Fat",
+    "Shellfish-Free",
+    "Crustacean-Free",
+    "Fish-Free",
+    "Mollusk-Free",
+    "Egg-Free",
+    "Soy-Free",
+    "Sesame-Free"
   ];
 
   const handleInputChange = (e) => {

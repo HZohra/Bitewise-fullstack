@@ -3,11 +3,12 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import ChatbotWidget from "./components/ChatbotWidget.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import Chatbot from "./pages/Chatbot.jsx";
+
 //public pages
 import Home from "./pages/Home";
 import Recipes from "./pages/Recipes";
 import Restaurants from "./pages/Restaurants";
+import Chatbot from "./pages/Chatbot";
 
 import AddRecipe from "./pages/AddRecipe";
 import RecipeDetails from "./pages/RecipeDetails";
