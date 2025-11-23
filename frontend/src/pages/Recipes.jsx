@@ -14,6 +14,7 @@ export default function Recipes() {
 
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
   const [favoriteRecipes, setFavoriteRecipes] = useState(() => {
     const saved = localStorage.getItem("favorites");
     return saved ? JSON.parse(saved) : [];
@@ -51,6 +52,7 @@ export default function Recipes() {
 
   const handleSearchSubmit = (e) => {
   e.preventDefault();
+  setHasSearched(true);
   fetchRecipes();  // run the search only when user clicks Search
   };
 
@@ -59,6 +61,7 @@ export default function Recipes() {
     setSelectedFilters([]);
     localStorage.removeItem("recipesSearchTerm");
     setRecipes([]);  // Clear current recipes
+    setHasSearched(false); // Reset search state
   };
 
 
@@ -71,6 +74,7 @@ export default function Recipes() {
    filtersForSearch = selectedFilters
   ) => {
     setLoading(true);
+    setHasSearched(true);
     try {
       let url = `http://localhost:5002/recipes?q=${encodeURIComponent(searchTerm)}`;
 
@@ -234,7 +238,9 @@ export default function Recipes() {
         </div>
       ) : (
         <p className="text-gray-500 text-center mt-20">
-          No recipes found for your search.
+          {hasSearched 
+            ? "No recipes found for your search." 
+            : "Search for a recipe to get started!"}
         </p>
       )}
 
