@@ -1,11 +1,12 @@
+// src/pages/RecipeDetails.jsx
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function RecipeDetails() {
   const { state: recipe } = useLocation();
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false); 
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  // check if in favs
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setIsFavorite(savedFavorites.some((fav) => fav.id === recipe?.id));
@@ -13,7 +14,9 @@ export default function RecipeDetails() {
 
   if (!recipe) {
     return (
-      <p className="text-center text-gray-500 mt-20">No recipe data found.</p>
+      <p className="text-center text-gray-500 mt-20">
+        No recipe data found.
+      </p>
     );
   }
 

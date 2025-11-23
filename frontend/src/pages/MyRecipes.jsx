@@ -21,38 +21,36 @@ export default function MyRecipes() {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) {
-          setError("You must be logged in to view your recipes.");
-          setLoading(false);
-          return;
-        }
-
-        const res = await fetch("http://localhost:5002/my-recipes", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch recipes.");
-        }
-
-        const data = await res.json();
-        // Expecting an array of recipes
-        setRecipes(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Error loading recipes:", err);
-        setError("Could not load your recipes. Please try again.");
-      } finally {
+        setError("You must be logged in to view your recipes.");
         setLoading(false);
+        return;
       }
-    };
 
-    fetchMyRecipes();
-  }, []);
+      const res = await fetch("http://localhost:5002/my-recipes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch recipes.");
+      }
+
+      const data = await res.json();
+      setRecipes(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error loading recipes:", err);
+      setError("Could not load your recipes. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchMyRecipes();
+}, []);
 
   const handleAddFirstRecipe = () => {
-    // adjust this route if your AddRecipe page uses a different path
-    navigate("/add-recipe");
+    navigate("/add");
   };
 
   return (
@@ -147,9 +145,10 @@ export default function MyRecipes() {
                         : "Imported"}
                     </span>
 
-                    {/* If you have a RecipeDetails route, you can link to it */}
+                    {/* Link to details page and pass recipe in state */}
                     <Link
-                      to={`/recipes/${recipe._id}`}
+                      to={`/recipe/${recipe._id}`}
+                      state={recipe}
                       className="text-sm text-emerald-600 font-semibold hover:underline"
                     >
                       View
@@ -157,16 +156,6 @@ export default function MyRecipes() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            <div className="mt-4">
-              <button
-                type="button"
-                onClick={handleAddFirstRecipe}
-                className="px-4 py-2 rounded-lg bg-emerald-500 text-white font-semibold hover:bg-emerald-600"
-              >
-                Add another recipe
-              </button>
             </div>
           </div>
         )}

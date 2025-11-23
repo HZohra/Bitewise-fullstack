@@ -12,6 +12,7 @@ import Restaurants from "./pages/Restaurants";
 import AddRecipe from "./pages/AddRecipe";
 import RecipeDetails from "./pages/RecipeDetails";
 import MyRecipes from "./pages/MyRecipes";
+import Favorite from "./pages/Favorite.jsx";
 
 //Auth Routes
 import Login from "./pages/Login.jsx";
@@ -47,6 +48,7 @@ function App() {
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
+          <Route path="/favorites" element={<Favorite />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/reset-password/:token"
