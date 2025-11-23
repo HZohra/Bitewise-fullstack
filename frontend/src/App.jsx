@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import ChatbotWidget from "./components/ChatbotWidget.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { ChatProvider } from "./context/ChatContext.jsx";
 
 //public pages
 import Home from "./pages/Home";
@@ -38,11 +39,12 @@ function App() {
     authRoutes.includes(location.pathname) || isResetPasswordRoute;
 
   return (
-    <div className="min-h-screen bg-green-50 text-gray-900">
-      {!hideNav && <NavBar />}
+    <ChatProvider>
+      <div className="min-h-screen bg-green-50 text-gray-900">
+        {!hideNav && <NavBar />}
 
-      <div className={hideNav ? "" : "p-6"}>
-        <Routes>
+        <div className={hideNav ? "" : "p-6"}>
+          <Routes>
           {/* Public */}
           <Route path="/" element={<Home />} />
           <Route path="/recipes" element={<Recipes />} />
@@ -101,7 +103,8 @@ function App() {
       </div>
 
       {!hideNav && <ChatbotWidget />}
-    </div>
+      </div>
+    </ChatProvider>
   );
 }
 

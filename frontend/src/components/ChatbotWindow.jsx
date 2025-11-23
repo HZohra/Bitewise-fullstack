@@ -1,19 +1,13 @@
 // src/components/ChatbotWindow.jsx
 import React, { useState, useRef, useEffect } from "react";
+import { useChat } from "../context/ChatContext";
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5002";
 
 export default function ChatbotWindow({ compact = false }) {
   const userName = "Zohra"; // 👈 name shown on user messages
+  const { messages, setMessages } = useChat();
 
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hi! I'm BiteWise, your dietary companion. I can help you with anything food related! What would you like to know?",
-      sender: "bot",
-      timestamp: new Date(),
-    },
-  ]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);

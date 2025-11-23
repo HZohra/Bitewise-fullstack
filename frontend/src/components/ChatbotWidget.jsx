@@ -1,13 +1,16 @@
 // src/components/ChatbotWidget.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ChatbotWindow from "./ChatbotWindow";
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
-  // Width changes when expanded; height is controlled by max-h on the container
-  const containerSize = isExpanded ? "w-[480px]" : "w-96";
+  const handleExpand = () => {
+    setIsOpen(false); // Close the widget
+    navigate("/chatbot"); // Navigate to full page
+  };
 
   return (
     <>
@@ -24,7 +27,7 @@ export default function ChatbotWidget() {
       {/* Popup chat window */}
       {isOpen && (
         <div
-          className={`fixed bottom-6 right-6 ${containerSize} max-h-[80vh] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden z-50`}
+          className="fixed bottom-6 right-6 w-96 max-h-[80vh] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden z-50"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-teal-50 rounded-t-xl">
@@ -33,13 +36,13 @@ export default function ChatbotWidget() {
             </span>
 
             <div className="flex items-center gap-2">
-              {/* Expand / shrink button */}
+              {/* Expand button - navigates to /chatbot page */}
               <button
-                onClick={() => setIsExpanded((prev) => !prev)}
+                onClick={handleExpand}
                 className="text-xs text-gray-500 hover:text-gray-700 border border-gray-300 rounded px-1.5 py-0.5"
-                title={isExpanded ? "Shrink" : "Expand"}
+                title="Expand to full page"
               >
-                {isExpanded ? "▢" : "⤢"}
+                ⤢
               </button>
 
               {/* Close button */}
