@@ -35,6 +35,24 @@ export default function RecipeDetails() {
     setIsFavorite(!isFavorite);
   };
 
+  //share feature
+  const handleShare = () => {
+    const shareData = {
+      title: recipe.name,
+      text: `Check out this recipe: ${recipe.name}`,
+      url: window.location.href, // uses live Vercel link after deployment
+    };
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .catch((error) => console.error("Share failed:", error));
+    } else {
+      navigator.clipboard.writeText(shareData.url);
+      alert("Link copied to clipboard!");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-green-50 p-6">
       <button
@@ -54,6 +72,12 @@ export default function RecipeDetails() {
           title={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           {isFavorite ? "❤️" : "🤍"}
+        </button>
+        <button
+          onClick={handleShare}
+          className="text-sm bg-teal-500 text-white px-3 py-2 rounded-lg hover:bg-teal-600 transition"
+        >
+        Share
         </button>
       </div>
 
