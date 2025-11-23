@@ -10,8 +10,25 @@ export default function Favorites() {
     setFavorites(savedFavorites);
   }, []);
 
+  // Refresh favorites when window gains focus (in case changed on another page)
+  useEffect(() => {
+    const handleFocus = () => {
+      const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      setFavorites(savedFavorites);
+    };
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
   const handleRecipeClick = (recipe) => {
     navigate(`/recipe/${encodeURIComponent(recipe.id)}`, { state: recipe });
+  };
+
+  const removeFavorite = (e, recipeId) => {
+    e.stopPropagation();
+    const updatedFavorites = favorites.filter(fav => fav.id !== recipeId);
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
   const clearFavorites = () => {
@@ -43,8 +60,16 @@ export default function Favorites() {
             <div
               key={recipe.id}
               onClick={() => handleRecipeClick(recipe)}
-              className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer transition p-3"
+              className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer transition p-3 relative"
             >
+              {/* Favorite Heart Icon - always filled since it's in favorites */}
+              <button
+                onClick={(e) => removeFavorite(e, recipe.id)}
+                className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
+              >
+                <span className="text-xl">❤️</span>
+              </button>
+              
               <img
                 src={recipe.image}
                 alt={recipe.name}

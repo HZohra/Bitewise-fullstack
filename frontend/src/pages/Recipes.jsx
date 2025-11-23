@@ -14,8 +14,8 @@ export default function Recipes() {
 
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem("favoriteRecipes");
+  const [favoriteRecipes, setFavoriteRecipes] = useState(() => {
+    const saved = localStorage.getItem("favorites");
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -134,21 +134,23 @@ export default function Recipes() {
   fetchRecipes(searchTerm, updatedFilters);
 };
 
-  const toggleFavorite = (e, recipeId) => {
+  const toggleFavorite = (e, recipe) => {
     e.stopPropagation(); // Prevent card click when clicking heart
     
     let updatedFavorites;
-    if (favorites.includes(recipeId)) {
-      updatedFavorites = favorites.filter(id => id !== recipeId);
+    const isFav = favoriteRecipes.some(fav => fav.id === recipe.id);
+    
+    if (isFav) {
+      updatedFavorites = favoriteRecipes.filter(fav => fav.id !== recipe.id);
     } else {
-      updatedFavorites = [...favorites, recipeId];
+      updatedFavorites = [...favoriteRecipes, recipe];
     }
     
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteRecipes", JSON.stringify(updatedFavorites));
+    setFavoriteRecipes(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
-  const isFavorite = (recipeId) => favorites.includes(recipeId);
+  const isFavorite = (recipeId) => favoriteRecipes.some(fav => fav.id === recipeId);
 
   const handleRecipeClick = (recipe) => {
     navigate(`/recipe/${encodeURIComponent(recipe.id)}`, { state: recipe });
@@ -211,7 +213,7 @@ export default function Recipes() {
             >
               {/* Favorite Heart Icon */}
               <button
-                onClick={(e) => toggleFavorite(e, recipe.id)}
+                onClick={(e) => toggleFavorite(e, recipe)}
                 className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
               >
                 <span className="text-xl">
