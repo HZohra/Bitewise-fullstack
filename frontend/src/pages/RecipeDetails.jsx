@@ -1,7 +1,6 @@
 // src/pages/RecipeDetails.jsx
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 export default function RecipeDetails() {
   const { state: recipe } = useLocation();

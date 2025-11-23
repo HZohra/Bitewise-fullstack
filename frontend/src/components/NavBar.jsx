@@ -15,7 +15,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="relative bg-teal-500 text-white flex justify-between items-center px-6 py-3 shadow-md">
+    <nav className="relative bg-teal-500 text-white flex items-center px-6 py-3 shadow-md">
       {/* LEFT: Hamburger + Brand */}
       <div className="flex items-center gap-4">
         {/* Hamburger */}
@@ -37,8 +37,8 @@ export default function NavBar() {
         </Link>
       </div>
 
-      {/* CENTER: Nav Links */}
-      <div className="flex items-center gap-6 text-sm font-medium">
+      {/* RIGHT: Nav Links */}
+      <div className="flex items-center gap-6 text-sm font-medium ml-auto mr-16">
         <Link to="/" className="hover:text-orange-300">
           Home
         </Link>
@@ -49,9 +49,6 @@ export default function NavBar() {
           Restaurants
         </Link>
       </div>
-
-      {/* RIGHT spacer (for future icons / cart) */}
-      <div className="w-10" />
 
       {/* ======== SIDE DRAWER + OVERLAY ========= */}
       {menuOpen && (
