@@ -2,37 +2,89 @@
 
 ## Project Type
 **BiteWise** is a **full-stack web application** for **healthy meal planning and recipe tracking**.  
-It helps users discover recipes, track nutritional information, and make healthier food choices.  
+It helps users discover recipes, track nutritional information, and make healthier food choices based on dietary restrictions and allergens.
 
-**Built with:** React + Vite + TailwindCSS (Frontend) | Node.js + Express (Backend)
-
-
-## Project Structure 
-- BiteWise/
-- ├── backend/           # Backend server built with Node.js and Express
-- ├── frontend/          # Frontend application developed using React and Vite
-- ├── .gitignore         # Specifies files and folders to be ignored by Git
-- ├── README.md          # Project overview, setup instructions, and documentation
-- ├── package-lock.json  # Automatically generated file to lock dependency versions
-- └── .vscode/           # VS Code workspace & configurations
-
-
-## Core Functionality
-- 🥗 Edamam API integration — connect to the Edamam API for recipe and nutrition data *(coming soon!)*
-- 👤 User profiles and authentication - allow users to save preferences, dietary restrictions, and favorite recipes.
-- 🔍 Recipe search and filtering — find recipes based on multiple restrictions and preparation time.
-- 💾 Store User Info — save user details such as allergens, dietary restrictions, and meal preferences securely.
-- ⚙️ Settings & Login/Sign Up Pages *(coming soon!)* — provide user account management and customization options.
+**Built with:** React + Vite + TailwindCSS (Frontend) | Node.js + Express + MongoDB (Backend)
 
 ---
 
-##🍽️ Additional Features
-- 🍴 **Restaurant Finder** *(coming soon!)* — connect with **Google** and **Yelp APIs** to help users locate nearby restaurants matching their dietary needs.  
-- 🧑‍🍳 **Add Your Own Recipe** *(coming soon!)* — enable users to upload and share their favorite recipes with allergen tags and categories.  
-- ❤️ **Favorite Recipes Page** *(coming soon!)* — allow users to save and view their favorite meals for quick access.  
-- 🤖 **AI Chatbot** *(coming soon!)* — help users with quick recipe searches, allergen explanations, and personalized meal planning suggestions.  
-- ✅ **Unit Tests and Automated Testing** — ensure consistent and reliable functionality across the app.
-//======================================================
+## Project Structure 
+```
+CP317_Group2_FinalProject/
+├── backend/
+│   └── bitewise-backend/
+│       ├── src/
+│       │   ├── app.js                      # Main Express server
+│       │   ├── config/                     # Database & API configurations
+│       │   ├── middleware/                 # Auth middleware
+│       │   ├── models/                     # MongoDB schemas (User, Recipe, ChatHistory)
+│       │   ├── routes/                     # API endpoints
+│       │   ├── services/                   # Business logic & chatbot
+│       │   └── utils/                      # Helper functions
+│       └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── pages/                          # React pages/views
+│   │   ├── components/                     # Reusable components
+│   │   ├── context/                        # Auth & Chat context providers
+│   │   ├── api/                            # API client functions
+│   │   └── services/                       # Frontend utilities
+│   └── package.json
+└── README.md
+```
+
+---
+
+## ✅ Implemented Features
+
+### 🔐 User Authentication & Profiles
+- **Complete user registration and login system** with JWT authentication
+- **Password reset functionality** via email with secure token-based reset
+- **User profile management** with dietary preferences, allergens, and cooking time limits
+- **Account settings page** for managing profile information, phone, and birth date
+- **Protected routes** requiring authentication for personalized features
+- **MongoDB storage** for secure user data persistence
+
+### 🥗 Recipe Management
+- **Edamam API integration** — fetch recipes with nutrition data and diet/health labels
+- **Multi-filter recipe search** — combine dietary restrictions (vegan, gluten-free, etc.) with search queries
+- **User-created recipes** — full CRUD operations for personal recipe collection
+- **Recipe details page** with ingredients, instructions, nutrition info, and diet labels
+- **Hybrid recipe database** — combines Edamam API results with user-submitted recipes
+- **My Recipes page** — view, edit, and delete personal recipes
+
+### 🤖 AI-Powered Chatbot
+- **Intent detection** for recipe search, restaurant finding, allergen explanations, and meal planning
+- **Entity extraction** for ingredients, dietary restrictions, and cooking preferences
+- **Recipe search via natural language** — "show me quick vegan dinner ideas"
+- **Multi-day meal planning** — generate meal plans based on user preferences
+- **Allergen substitution suggestions** using curated data
+- **Context-aware responses** with formatted recipe recommendations
+- **Chatbot UI** with message history and typing indicators
+
+### 🍴 Restaurant Finder
+- **OpenStreetMap/Overpass API integration** for nearby restaurant discovery
+- **Location-based search** using latitude/longitude coordinates
+- **Radius-based filtering** to find restaurants within specified distance
+- **Restaurant details** including name, address, and cuisine type
+
+### 📱 Frontend Pages (Fully Implemented)
+- **Home** — Landing page with app overview
+- **Login/Register** — User authentication flows
+- **Forgot/Reset Password** — Password recovery system
+- **Recipes** — Browse and search recipes with filters
+- **Recipe Details** — View full recipe information
+- **Add Recipe** — Create new personal recipes
+- **My Recipes** — Manage user-created recipes
+- **Chatbot** — Interactive AI assistant
+- **Restaurants** — Find nearby dining options
+- **Account Overview/Settings** — Manage profile and preferences
+- **My Allergies/Diets** — Set dietary restrictions and allergens
+- **Favorites** — Save preferred recipes *(UI complete, backend pending)*
+
+---
+
+## 🚧 In Progress / Planned Enhancements
 
 #1- chatbot improvements:
 - 🧠 Core Intelligence Improvements
