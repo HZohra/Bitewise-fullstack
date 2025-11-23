@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <div className="text-center mt-20">
-        <h1 className="text-3xl font-bold text-teal-600">Welcome to BiteWise</h1>
+        <h1 className="text-3xl font-bold text-teal-600">Welcome to BiteWise!</h1>
         <p className="text-gray-700 mt-2 mb-12">Your personalized dietary companion</p>
       </div>
 

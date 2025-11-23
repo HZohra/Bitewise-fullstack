@@ -3,27 +3,25 @@ import { useState } from "react";
 
 // API base URL — uses your .env file or defaults to port 5002
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5002";
+  import.meta.env.VITE_API_URL || "http://localhost:5002";
 
 // Known area → coordinates
 const AREA_COORDS = {
-  waterloo: { lat: 43.4643, lng: -80.5204 },
-  kitchener: { lat: 43.4516, lng: -80.4925 },
-  cambridge: { lat: 43.3974, lng: -80.3114 },
+  waterloo: { lat: 43.4643, lng: -80.5204 },
+  kitchener: { lat: 43.4516, lng: -80.4925 },
+  cambridge: { lat: 43.3974, lng: -80.3114 },
 };
 
 export default function Restaurants() {
-  const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [useGeolocation, setUseGeolocation] = useState(false);
-  const [geoLocation, setGeoLocation] = useState(null);
+  const [useGeolocation, setUseGeolocation] = useState(false);
+  const [geoLocation, setGeoLocation] = useState(null);
 
-  const [selectedArea, setSelectedArea] = useState("");
-  const [radiusKm, setRadiusKm] = useState(2);
-
-  // Get user location
+  const [selectedArea, setSelectedArea] = useState("");
+  const [radiusKm, setRadiusKm] = useState(2);  // Get user location
   const handleUseCurrentLocation = () => {
     setError("");
     setUseGeolocation(true);
@@ -48,51 +46,49 @@ export default function Restaurants() {
     );
   };
 
-  // Search backend for restaurants
-  const handleSearch = async () => {
-    setError("");
-    setLoading(true);
+  // Search backend for restaurants
+  const handleSearch = async () => {
+    setError("");
+    setLoading(true);
 
-    // Determine which coords to use
-    let center = null;
+    // Determine which coords to use
+    let center = null;
 
-    if (useGeolocation && geoLocation) {
-      center = geoLocation;
-    } else if (selectedArea) {
-      center = AREA_COORDS[selectedArea];
-    }
+    if (useGeolocation && geoLocation) {
+      center = geoLocation;
+    } else if (selectedArea) {
+      center = AREA_COORDS[selectedArea];
+    }
 
-    if (!center) {
-      setLoading(false);
-      setError("Please use your current location or choose an area.");
-      return;
-    }
+    if (!center) {
+      setLoading(false);
+      setError("Please use your current location or choose an area.");
+      return;
+    }
 
-    try {
-      const radiusMeters = Number(radiusKm) * 1000;
+    try {
+      const radiusMeters = Number(radiusKm) * 1000;
 
-      const res = await fetch(
-        `${API_BASE_URL}/restaurants/nearby?lat=${center.lat}&lng=${center.lng}&radius=${radiusMeters}`
-      );
+      const res = await fetch(
+        `${API_BASE_URL}/restaurants/nearby?lat=${center.lat}&lng=${center.lng}&radius=${radiusMeters}`
+      );
 
-      const data = await res.json();
+      const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Failed to fetch restaurants.");
-        setRestaurants([]);
-      } else {
-        setRestaurants(data.restaurants || []);
-      }
-    } catch (err) {
-      console.error("Error fetching restaurants:", err);
-      setError("Something went wrong while fetching restaurants.");
-      setRestaurants([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
+      if (!res.ok) {
+        setError(data.error || "Failed to fetch restaurants.");
+        setRestaurants([]);
+      } else {
+        setRestaurants(data.restaurants || []);
+      }
+    } catch (err) {
+      console.error("Error fetching restaurants:", err);
+      setError("Something went wrong while fetching restaurants.");
+      setRestaurants([]);
+    } finally {
+      setLoading(false);
+    }
+  };  return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold mb-2">Find Restaurants Near You</h1>
       <p className="text-gray-700 mb-4">
