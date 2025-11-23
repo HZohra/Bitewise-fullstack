@@ -11,7 +11,7 @@ export default function AddRecipe() {
     instructions: '',
     servings: '',
     totalTime: ''
-  });
+  });3
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -137,7 +137,7 @@ export default function AddRecipe() {
 
   return (
     <div className="mt-20 max-w-2xl mx-auto px-4 pb-8">
-      <h1 className="text-3xl font-bold text-teal-600 text-center mb-8">Add Your Recipe</h1>
+      <h1 className="text-3xl font-bold text-teal-600 text-center mb-8">Add A Recipe</h1>
       
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
