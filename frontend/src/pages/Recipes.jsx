@@ -14,6 +14,10 @@ export default function Recipes() {
 
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem("favoriteRecipes");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // Dietary filters matching backend dietary-mappings.json
   const filters = [
@@ -130,6 +134,22 @@ export default function Recipes() {
   fetchRecipes(searchTerm, updatedFilters);
 };
 
+  const toggleFavorite = (e, recipeId) => {
+    e.stopPropagation(); // Prevent card click when clicking heart
+    
+    let updatedFavorites;
+    if (favorites.includes(recipeId)) {
+      updatedFavorites = favorites.filter(id => id !== recipeId);
+    } else {
+      updatedFavorites = [...favorites, recipeId];
+    }
+    
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favoriteRecipes", JSON.stringify(updatedFavorites));
+  };
+
+  const isFavorite = (recipeId) => favorites.includes(recipeId);
+
   const handleRecipeClick = (recipe) => {
     navigate(`/recipe/${encodeURIComponent(recipe.id)}`, { state: recipe });
   };
@@ -187,8 +207,18 @@ export default function Recipes() {
             <div
               key={recipe.id}
               onClick={() => handleRecipeClick(recipe)}
-              className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer transition p-3"
+              className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer transition p-3 relative"
             >
+              {/* Favorite Heart Icon */}
+              <button
+                onClick={(e) => toggleFavorite(e, recipe.id)}
+                className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
+              >
+                <span className="text-xl">
+                  {isFavorite(recipe.id) ? "❤️" : "🤍"}
+                </span>
+              </button>
+              
               <img
                 src={recipe.image}
                 alt={recipe.name}
