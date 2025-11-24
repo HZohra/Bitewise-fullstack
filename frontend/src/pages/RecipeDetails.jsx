@@ -69,7 +69,6 @@ export default function RecipeDetails() {
             onClick={handleShare}
             className="flex items-center gap-2 text-sm bg-teal-500 text-white px-3 py-2 rounded-lg hover:bg-teal-600 transition"
           >
-            <span className="text-lg">✈️</span>
             Share
           </button>
           <button
