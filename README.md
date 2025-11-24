@@ -35,9 +35,9 @@ CP317_Group2_FinalProject/
 
 ---
 
-## ✅ Implemented Features
+##  Implemented Features
 
-### 🔐 User Authentication & Profiles
+###  User Authentication & Profiles
 - **Complete user registration and login system** with JWT authentication
 - **Password reset functionality** via email with secure token-based reset
 - **User profile management** with dietary preferences, allergens, and cooking time limits
@@ -45,7 +45,7 @@ CP317_Group2_FinalProject/
 - **Protected routes** requiring authentication for personalized features
 - **MongoDB storage** for secure user data persistence
 
-### 🥗 Recipe Management
+###  Recipe Management
 - **Edamam API integration** — fetch recipes with nutrition data and diet/health labels
 - **Multi-filter recipe search** — combine dietary restrictions (vegan, gluten-free, etc.) with search queries
 - **User-created recipes** — full CRUD operations for personal recipe collection
@@ -53,7 +53,7 @@ CP317_Group2_FinalProject/
 - **Hybrid recipe database** — combines Edamam API results with user-submitted recipes
 - **My Recipes page** — view, edit, and delete personal recipes
 
-### 🤖 AI-Powered Chatbot
+###  AI-Powered Chatbot
 - **Intent detection** for recipe search, restaurant finding, allergen explanations, and meal planning
 - **Entity extraction** for ingredients, dietary restrictions, and cooking preferences
 - **Recipe search via natural language** — "show me quick vegan dinner ideas"
@@ -62,13 +62,13 @@ CP317_Group2_FinalProject/
 - **Context-aware responses** with formatted recipe recommendations
 - **Chatbot UI** with message history and typing indicators
 
-### 🍴 Restaurant Finder
+###  Restaurant Finder
 - **OpenStreetMap/Overpass API integration** for nearby restaurant discovery
 - **Location-based search** using latitude/longitude coordinates
 - **Radius-based filtering** to find restaurants within specified distance
 - **Restaurant details** including name, address, and cuisine type
 
-### 📱 Frontend Pages (Fully Implemented)
+###  Frontend Pages (Fully Implemented)
 - **Home** — Landing page with app overview
 - **Login/Register** — User authentication flows
 - **Forgot/Reset Password** — Password recovery system
@@ -80,7 +80,7 @@ CP317_Group2_FinalProject/
 - **Restaurants** — Find nearby dining options
 - **Account Overview/Settings** — Manage profile and preferences
 - **My Allergies/Diets** — Set dietary restrictions and allergens
-- **Favorites** — Save preferred recipes *(UI complete, backend pending)*
+- **Favorites** — Save preferred recipes 
 
 ---
 
