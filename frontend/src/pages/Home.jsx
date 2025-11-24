@@ -26,7 +26,7 @@ export default function Home() {
             onClick={() => navigate('/chatbot')}
           >
             <h3 className="text-lg font-semibold text-teal-600 mb-2">🤖 AI Chatbot Assistant</h3>
-            <p className="text-gray-600 text-sm">Get personalized meal ideas, recipe suggestions, and restaurant recommendations instantly under the 'Chatbot' tab.</p>
+            <p className="text-gray-600 text-sm">Get personalized meal ideas, recipe suggestions, and restaurant recommendations instantly using our AI assistant available throughout the app.</p>
           </div>
           <div 
             className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
