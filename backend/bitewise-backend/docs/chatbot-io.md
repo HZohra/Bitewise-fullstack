@@ -1,4 +1,4 @@
-# BiteWise Chatbot – Input & Output Contract (Zohra)
+# BiteWise Chatbot – Input & Output Contract
 
 This file defines the single **input** the chatbot receives and the single **output** it always returns.  
 Keep this shape stable so the frontend ↔ backend stay in sync.
