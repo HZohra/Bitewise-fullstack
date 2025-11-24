@@ -1,8 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleProtectedNavigation = (path) => {
+    if (!isAuthenticated) {
+      alert('Please sign in or create an account to use this feature.');
+      navigate('/login');
+    } else {
+      navigate(path);
+    }
+  };
   return (
     <div>
       <div className="text-center mt-20">
@@ -37,14 +48,14 @@ export default function Home() {
           </div>
           <div 
             className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
-            onClick={() => navigate('/add')}
+            onClick={() => handleProtectedNavigation('/add')}
           >
             <h3 className="text-lg font-semibold text-teal-600 mb-2">👩‍🍳 Share Your Recipes</h3>
             <p className="text-gray-600 text-sm">Create and share your own recipes with the community through your account settings.</p>
           </div>
           <div 
             className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
-            onClick={() => navigate('/favorites')}
+            onClick={() => handleProtectedNavigation('/favorites')}
           >
             <h3 className="text-lg font-semibold text-teal-600 mb-2">❤️ Save Your Favorites</h3>
             <p className="text-gray-600 text-sm">Bookmark recipes you love and access them anytime from your 'Favorites' collection.</p>
