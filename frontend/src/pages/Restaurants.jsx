@@ -1,9 +1,6 @@
 // src/pages/Restaurants.jsx
 import { useState } from "react";
-
-// API base URL — uses your .env file or defaults to port 5002
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5002";
+import { API_BASE } from "../api/config.js";
 
 // Known area → coordinates
 const AREA_COORDS = {
@@ -70,7 +67,7 @@ export default function Restaurants() {
       const radiusMeters = Number(radiusKm) * 1000;
 
       const res = await fetch(
-        `${API_BASE_URL}/restaurants/nearby?lat=${center.lat}&lng=${center.lng}&radius=${radiusMeters}`
+        `${API_BASE}/restaurants/nearby?lat=${center.lat}&lng=${center.lng}&radius=${radiusMeters}`
       );
 
       const data = await res.json();

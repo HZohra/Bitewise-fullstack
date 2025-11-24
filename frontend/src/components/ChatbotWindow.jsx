@@ -1,8 +1,12 @@
 // src/components/ChatbotWindow.jsx
 import React, { useState, useRef, useEffect } from "react";
+<<<<<<< Updated upstream
 import { useChat } from "../context/ChatContext";
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5002";
+=======
+import { sendChatMessage, getUserProfile } from "../api/chatbot.js";
+>>>>>>> Stashed changes
 
 export default function ChatbotWindow({ compact = false }) {
   const userName = "Zohra"; // 👈 name shown on user messages
@@ -35,28 +39,21 @@ export default function ChatbotWindow({ compact = false }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE}/chat/ask`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: "u1", // later replace with real auth user id
-          text: userMessage.text,
-          profile: {
-            diets: [],
-            allergens: [],
-            max_time: null,
-            location: null,
-          },
-        }),
-      });
+      // Get user profile for context (if authenticated)
+      const userProfile = await getUserProfile().catch(() => null);
+      
+      // Prepare profile data
+      const profile = userProfile?.profile || {
+        diets: [],
+        allergens: [],
+        max_time: null,
+        location: null,
+      };
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const data = await response.json().catch(() => ({}));
-      const botText =
-        data?.response || "Sorry, I couldn't find anything for that.";
+      // Send message to chatbot
+      const data = await sendChatMessage(userMessage.text, profile);
+      
+      const botText = data?.response || "Sorry, I couldn't find anything for that.";
 
       const botMessage = {
         id: Date.now() + 1,
@@ -72,7 +69,7 @@ export default function ChatbotWindow({ compact = false }) {
       console.error("Error sending message:", error);
       const errorMessage = {
         id: Date.now() + 1,
-        text: "I can’t reach the server right now. Please try again.",
+        text: error.message || "I can't reach the server right now. Please try again.",
         sender: "bot",
         timestamp: new Date(),
       };

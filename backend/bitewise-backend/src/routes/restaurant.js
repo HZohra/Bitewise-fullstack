@@ -35,7 +35,11 @@ router.get("/nearby", async (req, res) => {
     return res.json({ restaurants });
   } catch (err) {
     console.error("Error in GET /restaurants/nearby:", err);
-    return res.status(500).json({ error: "Failed to fetch restaurants." });
+    console.error("Error details:", err.message, err.stack);
+    return res.status(500).json({ 
+      error: "Failed to fetch restaurants.",
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 });
 

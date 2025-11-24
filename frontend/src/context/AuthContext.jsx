@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
       if (!token || user) return;
       try {
         setLoading(true);
-        const me = await fetchMe(token);
+        const me = await fetchMe();
         setUser(me);
         localStorage.setItem("authUser", JSON.stringify(me));
       } catch (err) {

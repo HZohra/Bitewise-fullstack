@@ -15,130 +15,35 @@ export async function processChatMessage(input) {
   const { user_id, text, profile } = input;
 
   try {
-    // ---------------------------------------------------------
-    // 0) Special case: multi-day meal plan requests
-    // ---------------------------------------------------------
-    const lowerText = text.toLowerCase();
-
-    if (lowerText.includes('meal plan') || lowerText.includes('plan my meal')) {
-      const plan = buildTwoDayMealPlan(profile);
-
-      return {
-        user_id: user_id || 'anonymous',
-        response: plan,
-        recipes: []  // you can later attach structured recipes here if you want
-      };
-    }
-
-    // ---------------------------------------------------------
-    // 1) Default path: recipe search via Edamam
-    // ---------------------------------------------------------
-
-    // Extract simple query from user text
-    // Example: "Show me a vegan dinner under 30 min" -> "vegan dinner"
-    let query = text;
-
-    // Remove common phrases to get cleaner query
-    query = query
-      .replace(/show me/i, '')
-      .replace(/find me/i, '')
-      .replace(/give me/i, '')
-      .replace(/under \d+ min/i, '')
-      .replace(/within \d+ min/i, '')
-      .replace(/\brecipes?\b/i, '')
-      .trim();
-
-    // If query is empty, use original text
-    if (!query || query.length < 2) {
-      query = text;
-    }
-
-    console.log('Simplified query:', query);
-
-    const appId = process.env.EDAMAM_APP_ID;
-    const appKey = process.env.EDAMAM_APP_KEY;
-
-    const url = new URL('https://api.edamam.com/api/recipes/v2');
-    url.searchParams.append('type', 'public');
-    url.searchParams.append('q', query);
-    url.searchParams.append('app_id', appId);
-    url.searchParams.append('app_key', appKey);
-
-    console.log('Edamam URL:', url.toString());
-
-    const response = await fetch(url.toString());
-
-    console.log('Edamam HTTP status:', response.status);
-    const data = await response.json();
-
-    console.log(
-      'Edamam raw preview:',
-      JSON.stringify(data).slice(0, 200)
-    );
-    console.log('Edamam response hits:', data.hits?.length || 0);
-
-    // Handle API error
-    if (!response.ok) {
-      return {
-        user_id: user_id,
-        response: "I'm having trouble talking to the recipe server. Please try again.",
-        recipes: []
-      };
-    }
-
-    // Handle no recipes found
-    if (!data.hits || data.hits.length === 0) {
-      return {
-        user_id: user_id,
-        response: "Sorry, I couldn't find any recipes matching your criteria. Try a different search (for example: 'quick vegan dinner').",
-        recipes: []
-      };
-    }
-
-    // Extract richer recipe info (NO URLs, MORE details)
-    const recipes = data.hits.slice(0, 3).map(hit => ({
-      label: hit.recipe.label,
-      time: hit.recipe.totalTime,                       // in minutes
-      calories: Math.round(hit.recipe.calories),
-      dietLabels: hit.recipe.dietLabels || [],
-      healthLabels: hit.recipe.healthLabels || [],
-      ingredients: hit.recipe.ingredientLines || []     // full ingredient list
-    }));
-
-    // Build a ChatGPT-style text response (summary + details, no links)
-    let fullResponse = `Here are ${recipes.length} recipes I found for "${query}":\n\n`;
-
-    recipes.forEach((r, index) => {
-      const timeText = r.time ? `${r.time} minutes` : 'time not available';
-      const dietText = r.dietLabels.length > 0 ? r.dietLabels.join(', ') : 'not specified';
-      const healthText = r.healthLabels.length > 0 ? r.healthLabels.slice(0, 5).join(', ') : 'not specified';
-
-      fullResponse +=
-        `${index + 1}. ${r.label}\n` +
-        `   • Time: ${timeText}\n` +
-        `   • Calories (whole recipe): ~${r.calories}\n` +
-        `   • Diet: ${dietText}\n` +
-        `   • Health: ${healthText}\n` +
-        `   • Ingredients:\n` +
-        r.ingredients.map(ing => `     - ${ing}`).join('\n') +
-        `\n\n`;
-    });
-
-    fullResponse += `If you want, you can ask for things like "faster recipes", "high-protein vegan", or "gluten-free dessert".`;
-
-    // Final return: natural language + structured data
+    // Step 1: Detect user intent
+    const intent = detectIntent(text);
+    
+    // Step 2: Extract entities from the message
+    const entities = extractEntities(text, profile);
+    // Store original text in entities for general conversation
+    entities.originalText = text;
+    
+    // Step 3: Execute the appropriate action based on intent
+    const actionResult = await executeAction(intent, entities, profile);
+    
+    // Step 4: Format the response
+    const response = formatResponse(intent, actionResult, entities);
+    
     return {
-      user_id: user_id,
-      response: fullResponse.trim(),
-      recipes: recipes
+      user_id: user_id || 'anonymous',
+      intent,
+      entities,
+      response,
+      timestamp: new Date().toISOString()
     };
-
   } catch (error) {
-    console.error('processChatMessage error:', error);
+    console.error('Error processing chat message:', error);
     return {
-      user_id: user_id,
-      response: "I'm having trouble finding recipes. Please try again.",
-      recipes: []
+      user_id: user_id || 'anonymous',
+      intent: 'error',
+      entities: {},
+      response: "I'm sorry, I encountered an error processing your request. Please try again.",
+      timestamp: new Date().toISOString()
     };
   }
 }

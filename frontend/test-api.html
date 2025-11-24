@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BiteWise API Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        button { padding: 10px; margin: 5px; cursor: pointer; }
+        .result { margin: 20px 0; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>🧪 BiteWise API Test Page</h1>
+    
+    <h2>Test Recipe API</h2>
+    <button onclick="testRecipes()">Test Recipe Search</button>
+    <div id="recipeResult" class="result"></div>
+    
+    <h2>Test Chatbot API</h2>
+    <button onclick="testChatbot()">Test Chatbot</button>
+    <div id="chatbotResult" class="result"></div>
+    
+    <h2>Test Auth API</h2>
+    <button onclick="testAuth()">Test Auth (Register)</button>
+    <div id="authResult" class="result"></div>
+
+    <script type="module">
+        const API_BASE = 'http://localhost:5002';
+        
+        window.testRecipes = async () => {
+            const resultDiv = document.getElementById('recipeResult');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/recipes?q=pasta`);
+                const data = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ Recipe API works! Found recipes: ' + (data.hits?.length || 0);
+                console.log('Recipe data:', data);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Error: ' + error.message;
+            }
+        };
+        
+        window.testChatbot = async () => {
+            const resultDiv = document.getElementById('chatbotResult');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/chat/ask`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: 'Show me vegan pasta' })
+                });
+                const data = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ Chatbot API works! Response: ' + data.response.substring(0, 100) + '...';
+                console.log('Chatbot data:', data);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Error: ' + error.message;
+            }
+        };
+        
+        window.testAuth = async () => {
+            const resultDiv = document.getElementById('authResult');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: 'test' + Date.now() + '@example.com',
+                        password: 'Test123!@#'
+                    })
+                });
+                const data = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ Auth API works! User created: ' + data.user?.name;
+                console.log('Auth data:', data);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Error: ' + error.message;
+            }
+        };
+    </script>
+</body>
+</html>
+
