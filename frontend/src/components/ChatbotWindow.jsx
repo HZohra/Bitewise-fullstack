@@ -1,12 +1,7 @@
 // src/components/ChatbotWindow.jsx
 import React, { useState, useRef, useEffect } from "react";
-<<<<<<< Updated upstream
 import { useChat } from "../context/ChatContext";
-
-const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5002";
-=======
 import { sendChatMessage, getUserProfile } from "../api/chatbot.js";
->>>>>>> Stashed changes
 
 export default function ChatbotWindow({ compact = false }) {
   const userName = "Zohra"; // 👈 name shown on user messages
