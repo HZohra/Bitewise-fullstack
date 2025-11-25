@@ -194,6 +194,78 @@ const WATERLOO_RESTAURANT_FILTERS = {
     glutenFree: false,
     halal: false,
   },
+  "Meet Fresh": {
+    vegetarian: false,
+    vegan: true,
+    glutenFree: true,
+    halal: false,
+  },
+  "iPho": {
+    vegetarian: false,
+    vegan: true,
+    glutenFree: true,
+    halal: false,
+  },
+  "Vijay's Indian Cuisine": {
+    vegetarian: false,
+    vegan: true,
+    glutenFree: false,
+    halal: false,
+  },
+  "Empress of India": {
+    vegetarian: true,
+    vegan: true,
+    glutenFree: true,
+    halal: false,
+  },
+  "Sole": {
+    vegetarian: true,
+    vegan: true,
+    glutenFree: true,
+    halal: false,
+  },
+  "Yunshang Rice Noodle": {
+    vegetarian: true,
+    vegan: false,
+    glutenFree: true,
+    halal: false,
+  },
+  "Copper Branch": {
+    vegetarian: true,
+    vegan: true,
+    glutenFree: false,
+    halal: false,
+  },
+  "Graffiti Market": {
+    vegetarian: true,
+    vegan: true,
+    glutenFree: true,
+    halal: false,
+  },
+  "Exclamation": {
+    vegetarian: true,
+    vegan: false,
+    glutenFree: false,
+    halal: false,
+  },
+  "Bao Sandwich Bar": {
+    vegetarian: true,
+    vegan: true,
+    glutenFree: false,
+    halal: false,
+  },
+  "Loloan Lobby Bar": {
+    vegetarian: true,
+    vegan: true,
+    glutenFree: false,
+    halal: false,
+  },
+  "Fiddleheads Smoothie Bar": {
+    vegetarian: true,
+    vegan: false,
+    glutenFree: false,
+    halal: false,
+  },
 };
 
 /**
