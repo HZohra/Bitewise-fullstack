@@ -1,46 +1,34 @@
 // src/api/auth.js
+import { apiRequest } from "./config.js";
 
-// Use your existing env variable + default to 5002
-const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5002";
-
-export async function registerUser({ name, email, password }) {
-  const res = await fetch(`${API_BASE}/auth/register`, {
+export async function registerUser({ name, email, password, birthDate, phone }) {
+  return apiRequest("/auth/register", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, password }),
+    body: JSON.stringify({ name, email, password, birthDate, phone }),
   });
-
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || "Failed to register");
-  }
-  return data; // { user, token }
 }
 
 export async function loginUser({ email, password }) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
+  return apiRequest("/auth/login", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || "Failed to login");
-  }
-  return data; // { user, token }
 }
 
-export async function fetchMe(token) {
-  const res = await fetch(`${API_BASE}/auth/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export async function fetchMe() {
+  return apiRequest("/auth/me");
+}
 
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || "Failed to fetch profile");
-  }
-  return data;
+export async function forgotPassword(email) {
+  return apiRequest("/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+}
+
+export async function resetPassword(token, newPassword) {
+  return apiRequest("/auth/reset-password", {
+    method: "POST",
+    body: JSON.stringify({ token, newPassword }),
+  });
 }

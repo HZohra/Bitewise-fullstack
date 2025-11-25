@@ -23,6 +23,9 @@ export async function executeAction(intent, entities, profile) {
     case 'substitutions':  // Provide ingredient substitutions
       return await handleSubstitutions(entities, profile);
     
+    case 'generalConversation':  // Handle general questions and conversation
+      return await handleGeneralConversation(entities, profile);
+    
     default: // Unknown intent
       return {
         type: 'error',
@@ -214,6 +217,96 @@ function handleSubstitutions(entities, profile) {
 function getSubstitutionsForAllergen(allergen) {
   const allergenSubs = substitutions.substitutions[allergen] || [];
   return allergenSubs.slice(0, 2).map(sub => sub.ingredient);
+}
+
+function handleGeneralConversation(entities, profile) {
+  const responses = {
+    greeting: [
+      "Hello! I'm BiteWise, your dietary companion. How can I help you today?",
+      "Hi there! I'm here to help with recipes, meal planning, and dietary questions. What would you like to know?",
+      "Hey! I'm BiteWise. I can help you find recipes, plan meals, check allergens, and more. What can I do for you?"
+    ],
+    help: [
+      "I can help you with:\n• Finding recipes based on dietary restrictions\n• Meal planning for multiple days\n• Checking allergens in recipes\n• Finding ingredient substitutions\n• Restaurant recommendations\n\nJust ask me anything food-related!",
+      "Here's what I can do:\n• Search recipes (e.g., 'Show me vegan pasta')\n• Plan meals (e.g., 'Plan my meals for 3 days')\n• Explain allergens (e.g., 'Why can't I eat this?')\n• Suggest substitutions (e.g., 'Substitute for milk')\n• Find restaurants (e.g., 'Vegan restaurants near me')\n\nWhat would you like help with?"
+    ],
+    thanks: [
+      "You're welcome! Feel free to ask if you need anything else.",
+      "Happy to help! Let me know if you have more questions.",
+      "Anytime! I'm here whenever you need assistance with food and recipes."
+    ],
+    goodbye: [
+      "Goodbye! Have a great day and enjoy your meals!",
+      "See you later! Stay healthy!",
+      "Take care! Come back anytime you need recipe help."
+    ],
+    general: [
+      "I'm BiteWise, your AI assistant for all things food and dietary restrictions. I can help you find recipes, plan meals, check for allergens, and suggest ingredient substitutions. What would you like to know?",
+      "I specialize in helping people with dietary restrictions find safe and delicious meals. I can search recipes, create meal plans, explain allergens, and suggest alternatives. How can I assist you?",
+      "I'm here to make meal planning easier for people with food allergies and dietary restrictions. Ask me about recipes, meal planning, allergens, or substitutions - I'm happy to help!"
+    ]
+  };
+
+  // Use original text if available, otherwise use foodTopic
+  const text = entities.originalText || entities.foodTopic || '';
+  const lowerText = text.toLowerCase();
+
+  if (/hello|hi|hey|greetings/i.test(lowerText)) {
+    return {
+      type: 'conversation',
+      message: responses.greeting[Math.floor(Math.random() * responses.greeting.length)]
+    };
+  }
+
+  if (/help|what.*can.*you|how.*do.*you|what.*you.*do/i.test(lowerText)) {
+    return {
+      type: 'conversation',
+      message: responses.help[Math.floor(Math.random() * responses.help.length)]
+    };
+  }
+
+  if (/thanks|thank you|appreciate/i.test(lowerText)) {
+    return {
+      type: 'conversation',
+      message: responses.thanks[Math.floor(Math.random() * responses.thanks.length)]
+    };
+  }
+
+  if (/bye|goodbye|see you|later/i.test(lowerText)) {
+    return {
+      type: 'conversation',
+      message: responses.goodbye[Math.floor(Math.random() * responses.goodbye.length)]
+    };
+  }
+
+  // Try to provide helpful responses for common questions
+  if (/what.*is.*bitewise|what.*are.*you|who.*are.*you/i.test(lowerText)) {
+    return {
+      type: 'conversation',
+      message: "I'm BiteWise, an AI assistant designed to help people with dietary restrictions and food allergies. I can help you find safe recipes, plan meals, check for allergens, and suggest ingredient substitutions. How can I assist you today?"
+    };
+  }
+
+  if (/how.*work|how.*do.*you|what.*can.*you.*do/i.test(lowerText)) {
+    return {
+      type: 'conversation',
+      message: responses.help[Math.floor(Math.random() * responses.help.length)]
+    };
+  }
+
+  // For questions about food/nutrition that aren't recipe searches
+  if (/what.*is.*good.*for|healthy.*food|nutrition|vitamin|protein|calorie/i.test(lowerText)) {
+    return {
+      type: 'conversation',
+      message: "I can help you find healthy recipes and nutritional information! Try asking me things like:\n• 'Show me high-protein recipes'\n• 'Find low-calorie meals'\n• 'What are good sources of [nutrient]'\n\nOr I can search for specific recipes that match your dietary needs. What would you like to know?"
+    };
+  }
+
+  // Friendly response for anything else
+  return {
+    type: 'conversation',
+    message: "I'm BiteWise, your dietary companion! I specialize in helping with recipes, meal planning, and dietary restrictions. While I'm best at food-related questions, I'm here to help however I can.\n\nTry asking me:\n• 'Show me vegan recipes'\n• 'Plan my meals for 2 days'\n• 'What can I substitute for eggs?'\n• 'Why can't I eat this dish?'\n\nWhat would you like help with?"
+  };
 }
 
 function findSubstitutions(ingredient, userAllergens) {

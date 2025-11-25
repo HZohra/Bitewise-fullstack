@@ -1,8 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleProtectedNavigation = (path) => {
+    if (!isAuthenticated) {
+      alert('Please sign in or create an account to use this feature.');
+      navigate('/login');
+    } else {
+      navigate(path);
+    }
+  };
   return (
     <div>
       <div className="text-center mt-20">
@@ -11,36 +22,43 @@ export default function Home() {
       </div>
 
       {/* Key Features Section */}
-      <section className="max-w-6xl mx-auto px-6">
+      <section className="max-w-7xl mx-auto px-6">
         <h2 className="text-2xl font-semibold text-teal-600 mb-6 text-center">What We Offer</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           <div 
-            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
             onClick={() => navigate('/recipes')}
           >
-            <h3 className="text-xl font-semibold text-teal-600 mb-2">🍲 Multi-Restriction Filtering</h3>
-            <p className="text-gray-600 text-sm">Filter recipes based on multiple dietary restrictions, including vegan, gluten-free, and more under the 'Recipes' tab.</p>
+            <h3 className="text-lg font-semibold text-teal-600 mb-2">🍲 Find Recipes</h3>
+            <p className="text-gray-600 text-sm">Search and filter recipes based on your dietary restrictions, allergies, and preferences under the 'Recipes' tab.</p>
           </div>
           <div 
-            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
             onClick={() => navigate('/chatbot')}
           >
-            <h3 className="text-xl font-semibold text-teal-600 mb-2">🤖 AI Chatbot</h3>
-            <p className="text-gray-600 text-sm">Ask BiteWise for meal ideas or restaurant suggestions instantly under the 'Chatbot' tab.</p>
+            <h3 className="text-lg font-semibold text-teal-600 mb-2">🤖 AI Chatbot Assistant</h3>
+            <p className="text-gray-600 text-sm">Get personalized meal ideas, recipe suggestions, and restaurant recommendations instantly using our AI assistant available throughout the app.</p>
           </div>
           <div 
-            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
             onClick={() => navigate('/restaurants')}
           >
-            <h3 className="text-xl font-semibold text-teal-600 mb-2">📍 Local Restaurant Integration</h3>
-            <p className="text-gray-600 text-sm">Discover nearby restaurants via Google Maps or Yelp that suit your dietary needs under the 'Restaurants' tab.</p>
+            <h3 className="text-lg font-semibold text-teal-600 mb-2">📍 Nearby Restaurants</h3>
+            <p className="text-gray-600 text-sm">Discover local restaurants that accommodate your dietary needs using integrated maps under the 'Restaurants' tab.</p>
           </div>
           <div 
-            className="bg-white shadow-md rounded-2xl px-8 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
-            onClick={() => navigate('/add')}
+            className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            onClick={() => handleProtectedNavigation('/add')}
           >
-            <h3 className="text-xl font-semibold text-teal-600 mb-2">👩‍🍳 Community Recipes</h3>
-            <p className="text-gray-600 text-sm">Share your own recipes and discover meals from others like you under the 'Add Recipe' tab.</p>
+            <h3 className="text-lg font-semibold text-teal-600 mb-2">👩‍🍳 Share Your Recipes</h3>
+            <p className="text-gray-600 text-sm">Create and share your own recipes with the community through your account settings.</p>
+          </div>
+          <div 
+            className="bg-white shadow-md rounded-2xl px-6 py-6 hover:shadow-lg transition-shadow cursor-pointer transform hover:scale-105"
+            onClick={() => handleProtectedNavigation('/favorites')}
+          >
+            <h3 className="text-lg font-semibold text-teal-600 mb-2">❤️ Save Your Favorites</h3>
+            <p className="text-gray-600 text-sm">Bookmark recipes you love and access them anytime from your 'Favorites' collection.</p>
           </div>
         </div>
       </section>

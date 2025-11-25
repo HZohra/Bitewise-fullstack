@@ -40,7 +40,7 @@ export default function RecipeDetails() {
     const shareData = {
       title: recipe.name,
       text: `Check out this recipe: ${recipe.name}`,
-      url: window.location.href, // uses live Vercel link after deployment
+      url: window.location.href, // uses live Vercel link after deploy
     };
 
     if (navigator.share) {

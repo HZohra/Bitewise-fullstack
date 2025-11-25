@@ -54,6 +54,27 @@ const INTENT_PATTERNS = {
     /alternative.*to/i,
     /what.*use.*instead/i,
     /sub.*for/i
+  ],
+  generalConversation: [
+    /hello/i,
+    /hi/i,
+    /hey/i,
+    /how are you/i,
+    /what can you do/i,
+    /help/i,
+    /thanks/i,
+    /thank you/i,
+    /bye/i,
+    /goodbye/i,
+    /what.*you/i,
+    /who.*you/i,
+    /tell me/i,
+    /explain/i,
+    /what is/i,
+    /how does/i,
+    /why/i,
+    /when/i,
+    /where/i
   ]
 };
 
@@ -69,6 +90,21 @@ export function detectIntent(text) {
     }
   }
   
-  // Default to quick search if no specific intent detected
+  // Check if it's a general question (contains question words but no food keywords)
+  const foodKeywords = ['recipe', 'food', 'meal', 'cook', 'eat', 'dinner', 'lunch', 'breakfast', 'ingredient', 'allergen', 'diet', 'vegan', 'restaurant'];
+  const hasFoodKeyword = foodKeywords.some(keyword => lowerText.includes(keyword));
+  const isQuestion = /^(what|how|why|when|where|who|can|do|is|are|will|would|should)/i.test(lowerText.trim());
+  
+  // If it's a question but not food-related, treat as general conversation
+  if (isQuestion && !hasFoodKeyword) {
+    return 'generalConversation';
+  }
+  
+  // If no specific intent and no food keywords, treat as general conversation
+  if (!hasFoodKeyword) {
+    return 'generalConversation';
+  }
+  
+  // Default to quick search if no specific intent detected but has food keywords
   return 'quickSearchRecipes';
 }

@@ -22,6 +22,9 @@ export function formatResponse(intent, actionResult, entities) {
     case 'no_results':
       return formatNoResults(actionResult, entities);
     
+    case 'conversation':
+      return actionResult.message;
+    
     case 'error':
       return actionResult.message;
     

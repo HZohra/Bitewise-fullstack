@@ -5,7 +5,9 @@ dotenv.config();
 
 export async function connectDB() {
   try {
-  // console.log("DEBUG: MONGODB_URI =", process.env.MONGODB_URI);
+    if (!process.env.MONGODB_URI) {
+      throw new Error("MONGODB_URI not set in environment variables");
+    }
 
     await mongoose.connect(process.env.MONGODB_URI, {
       serverSelectionTimeoutMS: 5000,
@@ -13,7 +15,7 @@ export async function connectDB() {
 
     console.log("✅ MongoDB connected successfully");
   } catch (err) {
-    console.error("❌ MongoDB connection error:", err.message);
-    process.exit(1);
+    // Don't exit - let server start anyway for endpoints that don't need DB
+    throw err;
   }
 }
