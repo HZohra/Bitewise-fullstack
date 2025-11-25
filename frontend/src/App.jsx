@@ -25,8 +25,8 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 //Account pages
 import AccountLayout from "./pages/AccountLayout.jsx";
 import AccountSettings from "./pages/AccountSettings.jsx";
-import MyAllergies from "./pages/MyAllergies.jsx";
-import MyDiets from "./pages/MyDiets.jsx";   // 🌱 new
+//import MyAllergies from "./pages/MyAllergies.jsx";
+//import MyDiets from "./pages/MyDiets.jsx";   // 🌱 new
 
 function App() {
   const location = useLocation();
@@ -70,17 +70,12 @@ function App() {
                 <AccountLayout />
               </ProtectedRoute>
             }
-          >
-            {/* /account → home */}
-            <Route index element={<AccountSettings />} />
-            <Route path="settings" element={<AccountSettings />} />
+    >
+      {/* /account and /account/settings both show Personal Info */}
+      <Route index element={<AccountSettings />} />
+      <Route path="settings" element={<AccountSettings />} />
+    </Route>
 
-            {/* /account/allergies → allergies page */}
-            <Route path="allergies" element={<MyAllergies />} />
-
-            {/* /account/diets → diets page */}
-            <Route path="diets" element={<MyDiets />} />
-          </Route>
 
           {/* Standalone protected pages */}
           <Route

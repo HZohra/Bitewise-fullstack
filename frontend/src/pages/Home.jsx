@@ -23,8 +23,8 @@ export default function Home() {
         <img 
             src={logo} 
             alt="BiteWise Logo" 
-            className="w-60 mx-auto mb-10 drop-shadow-md"
-            style={{ borderRadius: "12px" }}
+            className="w-40 mx-auto mb-10 drop-shadow-md"
+            style={{ borderRadius: "15px" }}
         />
         <h1 className="text-3xl font-bold text-teal-600">Welcome to BiteWise!</h1>
         <p className="text-gray-700 mt-2 mb-12">Your personalized dietary companion</p>

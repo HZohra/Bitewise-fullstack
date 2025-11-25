@@ -1,6 +1,5 @@
 // src/pages/AccountSettings.jsx
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const API_BASE = "http://localhost:5002";
@@ -17,7 +16,6 @@ function formatDateInput(dateString) {
 
 export default function AccountSettings() {
   const { user, setUser } = useAuth();
-  const [activeTab, setActiveTab] = useState("personal"); // still used for top pills
 
   // -------- PERSONAL INFO FORM STATE --------
   const [profile, setProfile] = useState({
@@ -154,7 +152,7 @@ export default function AccountSettings() {
       {/* Page title */}
       <h1 className="text-3xl font-bold mb-6">Personal Info</h1>
 
-      {/* Header card with avatar + pills */}
+      {/* Header card with avatar + pill */}
       <div className="bg-white rounded-2xl shadow mb-6 px-8 py-6 flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-2xl font-semibold">
@@ -170,33 +168,11 @@ export default function AccountSettings() {
           </div>
         </div>
 
-        {/* Pills row */}
+        {/* Single pill */}
         <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => setActiveTab("personal")}
-            className={`px-4 py-2 rounded-xl text-sm font-medium border transition ${
-              activeTab === "personal"
-                ? "bg-gray-900 text-white border-gray-900"
-                : "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-            }`}
-          >
+          <div className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-900 text-white border-gray-900">
             Personal info
-          </button>
-
-          <Link
-            to="/account/allergies"
-            className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-          >
-            Allergies
-          </Link>
-
-          <Link
-            to="/account/diets"
-            className="px-4 py-2 rounded-xl text-sm font-medium border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-          >
-            Diets
-          </Link>
+          </div>
         </div>
       </div>
 
