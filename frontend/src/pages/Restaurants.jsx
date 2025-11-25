@@ -341,30 +341,109 @@ export default function Restaurants() {
                   Coordinates: {r.lat?.toFixed(5)}, {r.lng?.toFixed(5)}
                 </div>
 
-                {(r.vegan || r.vegetarian || r.glutenFree || r.halal) && (
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {r.vegan && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
-                        Vegan
-                      </span>
-                    )}
-                    {r.vegetarian && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
-                        Vegetarian
-                      </span>
-                    )}
-                    {r.glutenFree && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
-                        Gluten-Free
-                      </span>
-                    )}
-                    {r.halal && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
-                        Halal
-                      </span>
-                    )}
-                  </div>
-                )}
+                {/* Display all dietary filter labels */}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {r.vegan && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Vegan
+                    </span>
+                  )}
+                  {r.vegetarian && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Vegetarian
+                    </span>
+                  )}
+                  {r.glutenFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Gluten-Free
+                    </span>
+                  )}
+                  {r.dairyFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Dairy-Free
+                    </span>
+                  )}
+                  {r.treeNutFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Tree-Nut-Free
+                    </span>
+                  )}
+                  {r.ketoFriendly && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Keto-Friendly
+                    </span>
+                  )}
+                  {r.paleo && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Paleo
+                    </span>
+                  )}
+                  {r.lowCarb && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Low-Carb
+                    </span>
+                  )}
+                  {r.lowSugar && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Low-Sugar
+                    </span>
+                  )}
+                  {r.lowSodium && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Low-Sodium
+                    </span>
+                  )}
+                  {r.highProtein && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      High-Protein
+                    </span>
+                  )}
+                  {r.lowFat && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Low-Fat
+                    </span>
+                  )}
+                  {r.shellfishFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Shellfish-Free
+                    </span>
+                  )}
+                  {r.crustaceanFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Crustacean-Free
+                    </span>
+                  )}
+                  {r.fishFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Fish-Free
+                    </span>
+                  )}
+                  {r.molluskFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Mollusk-Free
+                    </span>
+                  )}
+                  {r.eggFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Egg-Free
+                    </span>
+                  )}
+                  {r.soyFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Soy-Free
+                    </span>
+                  )}
+                  {r.sesameFree && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Sesame-Free
+                    </span>
+                  )}
+                  {r.halal && (
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200">
+                      Halal
+                    </span>
+                  )}
+                </div>
               </div>
             );
           })}
