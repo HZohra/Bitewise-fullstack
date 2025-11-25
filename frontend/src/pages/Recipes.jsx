@@ -162,8 +162,14 @@ export default function Recipes() {
 
   return (
     <div className="min-h-screen bg-green-50 p-6 relative">
-    {/* Search Bar */}
-    <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+      {/* Page Header */}
+      <div className="text-center mt-20">
+        <h1 className="text-3xl font-bold text-teal-600">Recipes</h1>
+        <p className="text-gray-700 mt-2 mb-12">Discover delicious recipes tailored to your dietary needs</p>
+      </div>
+
+      {/* Search Bar */}
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
       <form onSubmit={handleSearchSubmit}>
         <div className="flex gap-2">
           <input

@@ -64,21 +64,23 @@ export default function RecipeDetails() {
 
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold text-teal-700">{recipe.name}</h1>
-        <button
-          onClick={toggleFavorite}
-          className={`text-2xl transition ${
-            isFavorite ? "text-red-500" : "text-gray-400 hover:text-red-400"
-          }`}
-          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
-        >
-          {isFavorite ? "❤️" : "🤍"}
-        </button>
-        <button
-          onClick={handleShare}
-          className="text-sm bg-teal-500 text-white px-3 py-2 rounded-lg hover:bg-teal-600 transition"
-        >
-        Share
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 text-sm bg-teal-500 text-white px-3 py-2 rounded-lg hover:bg-teal-600 transition"
+          >
+            Share
+          </button>
+          <button
+            onClick={toggleFavorite}
+            className={`text-2xl transition ${
+              isFavorite ? "text-red-500" : "text-gray-400 hover:text-red-400"
+            }`}
+            title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          >
+            {isFavorite ? "❤️" : "🤍"}
+          </button>
+        </div>
       </div>
 
       <img
