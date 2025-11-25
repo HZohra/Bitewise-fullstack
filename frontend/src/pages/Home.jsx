@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/bitewise-logo.png';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -15,8 +16,16 @@ export default function Home() {
     }
   };
   return (
+    
     <div>
+      
       <div className="text-center mt-20">
+        <img 
+            src={logo} 
+            alt="BiteWise Logo" 
+            className="w-60 mx-auto mb-10 drop-shadow-md"
+            style={{ borderRadius: "12px" }}
+        />
         <h1 className="text-3xl font-bold text-teal-600">Welcome to BiteWise!</h1>
         <p className="text-gray-700 mt-2 mb-12">Your personalized dietary companion</p>
       </div>

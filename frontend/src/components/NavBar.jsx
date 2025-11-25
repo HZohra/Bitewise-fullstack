@@ -2,6 +2,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import logo from "../assets/bitewise-logo.png";
+
+
 
 export default function NavBar() {
   const { user, logout } = useAuth();
@@ -31,9 +34,14 @@ export default function NavBar() {
           </div>
         </button>
 
-        {/* Brand */}
-        <Link to="/" className="text-xl font-bold tracking-wide">
-          BiteWise
+        {/* Brand with logo */}
+        <Link to="/" className="flex items-center gap-2 text-xl font-bold tracking-wide">
+          <img
+            src={logo}
+            alt="BiteWise Logo"
+            className="w-8 h-8 object-contain bg-white rounded-full p-1"
+          />
+          <span>BiteWise</span>
         </Link>
       </div>
 
