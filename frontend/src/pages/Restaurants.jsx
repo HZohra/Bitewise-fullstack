@@ -18,7 +18,61 @@ export default function Restaurants() {
   const [geoLocation, setGeoLocation] = useState(null);
 
   const [selectedArea, setSelectedArea] = useState("");
-  const [radiusKm, setRadiusKm] = useState(2);  // Get user location
+  const [radiusKm, setRadiusKm] = useState(2);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
+  // Dietary filters matching backend dietary-mappings.json
+  const filters = [
+    "Vegan",
+    "Vegetarian", 
+    "Gluten-Free",
+    "Dairy-Free",
+    "Tree-Nut-Free",
+    "Keto-Friendly",
+    "Paleo",
+    "Low-Carb",
+    "Low-Sugar",
+    "Low-Sodium",
+    "High-Protein",
+    "Low-Fat",
+    "Shellfish-Free",
+    "Crustacean-Free",
+    "Fish-Free",
+    "Mollusk-Free",
+    "Egg-Free",
+    "Soy-Free",
+    "Sesame-Free"
+  ];
+
+  const toggleFilter = (filter) => {
+    if (selectedFilters.includes(filter)) {
+      setSelectedFilters(selectedFilters.filter((f) => f !== filter));
+    } else {
+      setSelectedFilters([...selectedFilters, filter]);
+    }
+  };
+
+  const handleResetFilters = () => {
+    setSelectedFilters([]);
+  };
+
+  // Filter restaurants based on selected dietary filters
+  const filteredRestaurants = restaurants.filter((restaurant) => {
+    if (selectedFilters.length === 0) return true;
+
+    // Map our filter names to restaurant properties
+    const filterMap = {
+      "Vegan": restaurant.vegan,
+      "Vegetarian": restaurant.vegetarian,
+      // For now, only Vegan and Vegetarian are supported by OpenStreetMap data
+      // Other filters could be added if the data becomes available
+    };
+
+    // Restaurant must match at least one selected filter
+    return selectedFilters.some(filter => filterMap[filter] === true);
+  });
+
+  // Get user location
   const handleUseCurrentLocation = () => {
     setError("");
     setUseGeolocation(true);
@@ -44,7 +98,15 @@ export default function Restaurants() {
   };
 
   // Search backend for restaurants
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    console.log("🔍 Search button clicked");
+    console.log("🔍 Current state:", { useGeolocation, geoLocation, selectedArea, radiusKm });
+    
     setError("");
     setLoading(true);
 
@@ -53,34 +115,40 @@ export default function Restaurants() {
 
     if (useGeolocation && geoLocation) {
       center = geoLocation;
+      console.log("📍 Using geolocation:", center);
     } else if (selectedArea) {
       center = AREA_COORDS[selectedArea];
+      console.log("📍 Using selected area:", selectedArea, center);
     }
 
     if (!center) {
       setLoading(false);
       setError("Please use your current location or choose an area.");
+      console.log("❌ No location selected");
       return;
     }
 
     try {
       const radiusMeters = Number(radiusKm) * 1000;
+      const url = `${API_BASE}/restaurants/nearby?lat=${center.lat}&lng=${center.lng}&radius=${radiusMeters}`;
+      console.log("📡 Fetching from:", url);
 
-      const res = await fetch(
-        `${API_BASE}/restaurants/nearby?lat=${center.lat}&lng=${center.lng}&radius=${radiusMeters}`
-      );
+      const res = await fetch(url);
+      console.log("📡 Response status:", res.status);
 
       const data = await res.json();
+      console.log("📡 Response data:", data);
 
       if (!res.ok) {
         setError(data.error || "Failed to fetch restaurants.");
         setRestaurants([]);
       } else {
         setRestaurants(data.restaurants || []);
+        console.log("✅ Found", data.restaurants?.length || 0, "restaurants");
       }
     } catch (err) {
-      console.error("Error fetching restaurants:", err);
-      setError("Something went wrong while fetching restaurants.");
+      console.error("❌ Error fetching restaurants:", err);
+      setError("Something went wrong while fetching restaurants. Check console for details.");
       setRestaurants([]);
     } finally {
       setLoading(false);
@@ -159,44 +227,78 @@ export default function Restaurants() {
             />
           </div>
 
-          {/* Search button */}
-          <div className="flex flex-col">
-            <span className="text-sm font-medium mb-1 invisible">.</span>
-            <button
-              onClick={handleSearch}
-              className="px-5 py-2 rounded-lg bg-emerald-500 text-white font-semibold hover:bg-emerald-600"
-            >
-              Search
-            </button>
-          </div>
-        </div>
+          {/* Search button */}
+          <div className="flex flex-col">
+            <span className="text-sm font-medium mb-1 invisible">.</span>
+            <button
+              type="button"
+              onClick={handleSearch}
+              disabled={loading}
+              className="px-5 py-2 rounded-lg bg-emerald-500 text-white font-semibold hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Searching..." : "Search"}
+            </button>
+          </div>
 
-        {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
-      </div>
+          {/* Reset Filters button */}
+          <div className="flex flex-col">
+            <span className="text-sm font-medium mb-1 invisible">.</span>
+            <button
+              onClick={handleResetFilters}
+              className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition font-medium whitespace-nowrap"
+            >
+              Reset Filters
+            </button>
+          </div>
+        </div>
 
-      {/* RESULTS */}
+        {/* Filter Tags */}
+        <div className="flex flex-wrap gap-2 mt-3 max-h-32 overflow-y-auto">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => toggleFilter(filter)}
+              className={`px-3 py-1 rounded-full text-sm font-medium border transition
+                ${
+                  selectedFilters.includes(filter)
+                    ? "bg-teal-500 text-white border-teal-500"
+                    : "bg-teal-100 text-teal-700 border-teal-200 hover:bg-teal-200"
+                }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
+      </div>      {/* RESULTS */}
       <div className="space-y-3">
         {loading && <p>Loading restaurants...</p>}
 
         {!loading && restaurants.length === 0 && !error && (
           <p className="text-sm text-gray-600">
-            No restaurants loaded yet. Choose a location and click{" "}
-            <span className="font-semibold">Search</span>.
-          </p>
-        )}
+            No restaurants loaded yet. Choose a location and click{" "}
+            <span className="font-semibold">Search</span>.
+          </p>
+        )}
 
-        {!loading &&
-          restaurants.map((r) => {
-            const line1 =
-              r.address.houseNumber && r.address.street
-                ? `${r.address.houseNumber} ${r.address.street}`
-                : r.address.street || null;
+        {!loading && restaurants.length > 0 && filteredRestaurants.length === 0 && (
+          <p className="text-sm text-gray-600">
+            No restaurants match the selected filters. Try adjusting your filters.
+          </p>
+        )}
 
-            const line2 = [r.address.city, r.address.postcode]
-              .filter(Boolean)
-              .join(" ");
+        {!loading &&
+          filteredRestaurants.map((r) => {
+            const line1 =
+              r.address.houseNumber && r.address.street
+                ? `${r.address.houseNumber} ${r.address.street}`
+                : r.address.street || null;
 
-            return (
+            const line2 = [r.address.city, r.address.postcode]
+              .filter(Boolean)
+              .join(" ");            return (
               <div
                 key={r.id}
                 className="bg-white rounded-2xl shadow px-4 py-3 flex flex-col gap-1"
