@@ -4,6 +4,25 @@
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 
 /**
+ * Hardcoded dietary filters for Waterloo region restaurants
+ * Maps restaurant names to their dietary options
+ */
+const WATERLOO_RESTAURANT_FILTERS = {
+  "Casa Rugantino": {
+    vegetarian: true,
+    vegan: false,
+    glutenFree: false,
+    halal: false,
+  },
+  "bb.q VILLAGE": {
+    vegetarian: false,
+    vegan: false,
+    glutenFree: true,
+    halal: false,
+  },
+};
+
+/**
  * Query Overpass for restaurants near a given lat/lng within radius (meters)
  */
 export async function fetchNearbyRestaurants(lat, lng, radiusMeters = 2000) {
@@ -51,6 +70,7 @@ export async function fetchNearbyRestaurants(lat, lng, radiusMeters = 2000) {
       .filter((el) => el.tags && el.tags.name)
       .map((el) => {
         const tags = el.tags || {};
+        const restaurantName = tags.name;
         const address = {
           houseNumber: tags["addr:housenumber"] || null,
           street: tags["addr:street"] || null,
@@ -61,16 +81,25 @@ export async function fetchNearbyRestaurants(lat, lng, radiusMeters = 2000) {
         const latVal = el.lat || el.center?.lat;
         const lngVal = el.lon || el.center?.lon;
 
+        // Check if this restaurant has hardcoded filters
+        const hardcodedFilters = WATERLOO_RESTAURANT_FILTERS[restaurantName];
+
+        // Apply hardcoded filters if available, otherwise use OSM tags
+        const dietaryOptions = hardcodedFilters || {
+          vegetarian: tags.vegetarian === "yes",
+          vegan: tags.vegan === "yes",
+          glutenFree: tags["diet:gluten_free"] === "yes",
+          halal: tags.halal === "yes",
+        };
+
         return {
           id: el.id,
-          name: tags.name,
+          name: restaurantName,
           cuisine: tags.cuisine || null,
           address,
           lat: latVal,
           lng: lngVal,
-          vegetarian: tags.vegetarian === "yes",
-          vegan: tags.vegan === "yes",
-          halal: tags.halal === "yes",
+          ...dietaryOptions,
           tags, // keep all original tags in case you want more later
         };
       });

@@ -64,8 +64,24 @@ export default function Restaurants() {
     const filterMap = {
       "Vegan": restaurant.vegan,
       "Vegetarian": restaurant.vegetarian,
-      // For now, only Vegan and Vegetarian are supported by OpenStreetMap data
-      // Other filters could be added if the data becomes available
+      "Gluten-Free": restaurant.glutenFree,
+      "Dairy-Free": restaurant.dairyFree,
+      "Tree-Nut-Free": restaurant.treeNutFree,
+      "Keto-Friendly": restaurant.ketoFriendly,
+      "Paleo": restaurant.paleo,
+      "Low-Carb": restaurant.lowCarb,
+      "Low-Sugar": restaurant.lowSugar,
+      "Low-Sodium": restaurant.lowSodium,
+      "High-Protein": restaurant.highProtein,
+      "Low-Fat": restaurant.lowFat,
+      "Shellfish-Free": restaurant.shellfishFree,
+      "Crustacean-Free": restaurant.crustaceanFree,
+      "Fish-Free": restaurant.fishFree,
+      "Mollusk-Free": restaurant.molluskFree,
+      "Egg-Free": restaurant.eggFree,
+      "Soy-Free": restaurant.soyFree,
+      "Sesame-Free": restaurant.sesameFree,
+      "Halal": restaurant.halal,
     };
 
     // Restaurant must match at least one selected filter
@@ -323,10 +339,11 @@ export default function Restaurants() {
                   Coordinates: {r.lat?.toFixed(5)}, {r.lng?.toFixed(5)}
                 </div>
 
-                {(r.vegan || r.vegetarian || r.halal) && (
+                {(r.vegan || r.vegetarian || r.glutenFree || r.halal) && (
                   <div className="text-xs text-emerald-700 mt-1">
                     {r.vegan && "Vegan · "}
                     {r.vegetarian && "Vegetarian · "}
+                    {r.glutenFree && "Gluten-Free · "}
                     {r.halal && "Halal"}
                   </div>
                 )}
