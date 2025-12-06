@@ -19,20 +19,46 @@ console.log("Loaded App ID:", process.env.EDAMAM_APP_ID);
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     // Allow requests with no origin (like mobile apps or curl requests)
+//     if (!origin) return callback(null, true);
     
-    // Allow any localhost origin
-    if (origin.startsWith('http://localhost:')) {
-      return callback(null, true);
-    }
+//     // Allow any localhost origin
+//     if (origin.startsWith('http://localhost:')) {
+//       return callback(null, true);
+//     }
     
-    callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true
-}));
+//     callback(new Error('Not allowed by CORS'));
+//   },
+//   credentials: true
+// }));
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:4173",
+  "https://YOUR-FRONTEND-NAME.vercel.app" // ⬅️ replace with your actual Vercel URL
+];
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Allow requests with no origin (Postman, curl, health checks)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS: " + origin));
+    },
+    credentials: true
+  })
+);
+
 app.use(express.json());
 
 // Routes
